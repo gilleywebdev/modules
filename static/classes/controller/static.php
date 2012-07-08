@@ -8,7 +8,7 @@ class Controller_Static extends Controller_Template {
 	public function action_fallback()
 	{
 		// Pure static, get the matching view from the pages folder
-		$this->template->content = View::factory('pages/'.$this->pagename);
+		$this->template->content = View::factory('static/'.$this->pagename);
 	}
 
 	public function before()
