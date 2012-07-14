@@ -8,7 +8,7 @@ class Controller_Error_Handler extends Controller_Staticplus {
 	{
 		parent::before();
 
-		// Bind the initial request for the 404 pag
+		// Bind the initial request for the 404 page
 		$initial_request = Request::$initial->uri();
 		View::bind_global('page', $initial_request);
  
