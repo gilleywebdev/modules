@@ -21,7 +21,7 @@ class Controller_Static extends Controller_Template {
 		if ( ! Kohana::find_file('views', 'pages/'.$this->pagename))
 		{
 			// Just a 404
-			throw new HTTP_Exception_404;
+			throw new HTTP_Exception_404($this->pagename.' not found');
 		}
 		else
 		{

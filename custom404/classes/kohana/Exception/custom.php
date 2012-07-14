@@ -3,7 +3,7 @@
 class Kohana_Exception_Custom extends Kohana_Kohana_Exception {
     public static function handler(Exception $e)
     {
-        if (Kohana::DEVELOPMENT === Kohana::$environment)
+        if (Kohana::$errors === TRUE)
         {
             parent::handler($e);
         }

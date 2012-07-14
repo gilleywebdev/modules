@@ -5,4 +5,7 @@ Route::set('error', 'error/<action>(/<message>)', array('action' => '[0-9]++', '
     'controller' => 'Error_Handler',
 ));
 
-set_exception_handler(array('Kohana_Exception_Custom', 'handler'));
+if (Kohana::$errors === FALSE)
+{
+	set_exception_handler(array('Kohana_Exception_Custom', 'handler'));
+}
