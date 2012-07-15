@@ -28,13 +28,22 @@ class Controller_Error_Handler extends Controller_Template {
 		$this->response->status((int) $this->request->action());
 	}
 
+	public function after()
+	{
+		View::bind_global('pagename', $this->pagename);
+		$this->template->title = $this->title;
+		$this->template->description = $this->description;
+
+		$this->template->content = View::factory('error/'.$this->request->action());
+
+		parent::after();
+	}
+
 	public function action_404()
 	{
-		View::set_global('title', '404 Page Not Found');
-		View::set_global('description', 'The page you requested could not be found.');
-		View::set_global('pagename', '404');
-
-		$this->template->content = View::factory('error/404');
+		$this->title = '404 Page Not Found';
+		$this->description = 'The page you requested could not be found.';
+		$this->pagename = '404';
  
 		// HTTP Status code.
 		$this->response->status(404);
@@ -42,11 +51,9 @@ class Controller_Error_Handler extends Controller_Template {
 
 	public function action_500()
 	{
-		View::set_global('title', 'Internal Server Error');
-		View::set_global('description', 'An internal server error occurred.');
-		View::set_global('pagename', '500');
-
-		$this->template->content = View::factory('error/500');		
+		$this->title = 'Internal Server Error';
+		$this->description = 'An internal server error occurred.';
+		$this->pagename = '500';		
 	}
 
 }
