@@ -30,7 +30,10 @@ class Controller_Error_Handler extends Controller_Template {
 
 	public function action_404()
 	{
-		$this->template->title = '404 Not Found';
+		View::set_global('title', '404 Page Not Found');
+		View::set_global('description', 'The page you requested could not be found.');
+		View::set_global('pagename', '404');
+
 		$this->template->content = View::factory('error/404');
  
 		// HTTP Status code.
@@ -39,8 +42,11 @@ class Controller_Error_Handler extends Controller_Template {
 
 	public function action_500()
 	{
-		$this->template->title = 'Internal Server Error';
-		$this->template->content = View::factory('error/505');		
+		View::set_global('title', 'Internal Server Error');
+		View::set_global('description', 'An internal server error occurred.');
+		View::set_global('pagename', '500');
+
+		$this->template->content = View::factory('error/500');		
 	}
 
 }
