@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Error_Handler extends Controller_Staticplus {
+class Controller_Error_Handler extends Controller_Template {
 	
 	public $template = 'template/main';
 	
@@ -31,6 +31,7 @@ class Controller_Error_Handler extends Controller_Staticplus {
 	public function action_404()
 	{
 		$this->template->title = '404 Not Found';
+		$this->template->content = View::factory('error/404');
  
 		// HTTP Status code.
 		$this->response->status(404);
@@ -38,7 +39,8 @@ class Controller_Error_Handler extends Controller_Staticplus {
 
 	public function action_500()
 	{
-		$this->template->title = 'Internal Server Error';		
+		$this->template->title = 'Internal Server Error';
+		$this->template->content = View::factory('error/505');		
 	}
 
 }
