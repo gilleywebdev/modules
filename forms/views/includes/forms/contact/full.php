@@ -1,16 +1,18 @@
 <?php
 	if($errors)
 	{
+		echo '<div class="errors"><ul>';
 		foreach($errors AS $message)
 		{
-			echo '<p>'.$message.'</p>';
+			echo '<li>'.$message.'</li>';
 		}
+		echo '</ul></div>';
 	}
 	echo Form::open('contact');
-	echo Form::input('name', NULL, array('label' => 'Name:'));
-	echo Form::input('email', NULL, array('label' => 'Email:'));
-	echo Form::input('honeypot', NULL, array('label' => 'Leave this blank:'));	
-	echo Form::hidden('formaction', 'contact');
-	echo Form::textarea('message', NULL, array('label' => 'Message:'));
+	echo Form::text('name', NULL, array('label' => 'Name'));
+	echo Form::text('email', NULL, array('label' => 'Email'));
+	echo Form::text('honeypot', NULL, array('label' => 'Leave this blank'));	
+	echo Form::action('contact');
+	echo Form::textarea('message', NULL, array('label' => 'Message'));
 	echo Form::submit(NULL, 'Submit');
 	echo Form::close();

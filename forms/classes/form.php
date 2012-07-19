@@ -3,121 +3,29 @@
 class Form extends Kohana_Form {	
 	private static function wrap($string, $name, $class)
 	{
-		return '<div id="'.$name.'_wrap" class="'.$class.' form_field_wrapper">'.$string.'</div>';
+		return '<div id="'.$name.'_wrap" class="'.$class.' wrap">'.$string.'</div>';
 	}
 	
-	public static function input($name, $value = NULL, array $attributes = NULL)
+	private static function intercept($attributes, $key)
 	{
-		// Intercept label
-		if(isset($attributes['label']))
+		if (isset($attributes[$key]))
 		{
-			$inner = self::label($name, $attributes['label']);
-			unset($attributes['label']);
+			$return = $attributes[$key];
+			unset($attributes[$key]);
+			return $return;
 		}
 		else{
-			$inner = '';
+			return false;
 		}
-		
-		$inner .= parent::input($name, $value, $attributes);
-
-		return self::wrap(
-			$inner,
-			$name,
-			'textbox'
-		);
 	}
 
-	public static function password($name, $value = NULL, array $attributes = NULL)
+	public static function have($string)
 	{
-		// Intercept label
-		if(isset($attributes['label']))
+		if (isset($_POST))
 		{
-			$inner = self::label($name, $attributes['label']);
-			unset($attributes['label']);
-		}
-		else{
-			$inner = '';
-		}
-		
-		$inner .= parent::password($name, $value, $attributes);
-
-		return self::wrap(
-			$inner,
-			$name,
-			'password'
-		);
-	}
-
-	public static function file($name, array $attributes = NULL)
-	{
-		// Intercept label
-		if(isset($attributes['label']))
-		{
-			$inner = self::label($name, $attributes['label']);
-			unset($attributes['label']);
-		}
-		else{
-			$inner = '';
-		}
-		
-		$inner .= parent::file($name, $attributes);
-
-		return self::wrap(
-			$inner,
-			$name,
-			'file'
-		);
-	}
-
-	public static function select($name, array $options = NULL, $selected = NULL, array $attributes = NULL)
-	{
-		// Intercept label
-		if(isset($attributes['label']))
-		{
-			$inner = self::label($name, $attributes['label']);
-			unset($attributes['label']);
-		}
-		else{
-			$inner = '';
-		}
-		
-		$inner .= parent::select($name, $options, $selected, $attributes);
-
-		return self::wrap(
-			$inner,
-			$name,
-			'select'
-		);
-	}
-	
-	public static function textarea($name, $body = '', array $attributes = NULL, $double_encode = TRUE)
-	{
-		// Intercept label
-		if(isset($attributes['label']))
-		{
-			$inner = self::label($name, $attributes['label']);
-			unset($attributes['label']);
-		}
-		else{
-			$inner = '';
-		}
-		
-		$inner .= parent::textarea($name, $body, $attributes, $double_encode);
-
-		return self::wrap(
-			$inner,
-			$name,
-			'textarea'
-		);
-	}
-	
-	public static function action($string)
-	{
-		if(isset($_POST))
-		{
-			if(isset($_POST['formaction']))
+			if (isset($_POST['formaction']))
 			{
-				if($_POST['formaction'] === $string)
+				if ($_POST['formaction'] === $string)
 				{
 					return true;
 				}
@@ -130,5 +38,79 @@ class Form extends Kohana_Form {
 			return false;
 		}
 	}
+	
+	public static function action($string)
+	{
+		return Form::hidden('formaction', $string);
+	}
 
+	public static function text($name, $value = NULL, array $attributes = NULL)
+	{
+		// if $attributes['label'] is set, append an html label and unset it
+		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+
+		$inner .= parent::input($name, $value, $attributes);
+
+		return self::wrap(
+			$inner,
+			$name,
+			'textbox'
+		);
+	}
+
+	public static function password($name, $value = NULL, array $attributes = NULL)
+	{
+		// if $attributes['label'] is set, append an html label and unset it
+		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+		
+		$inner .= parent::password($name, $value, $attributes);
+
+		return self::wrap(
+			$inner,
+			$name,
+			'password'
+		);
+	}
+
+	public static function file($name, array $attributes = NULL)
+	{
+		// if $attributes['label'] is set, append an html label and unset it
+		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+		
+		$inner .= parent::file($name, $attributes);
+
+		return self::wrap(
+			$inner,
+			$name,
+			'file'
+		);
+	}
+
+	public static function select($name, array $options = NULL, $selected = NULL, array $attributes = NULL)
+	{
+		// if $attributes['label'] is set, append an html label and unset it
+		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+		
+		$inner .= parent::select($name, $options, $selected, $attributes);
+
+		return self::wrap(
+			$inner,
+			$name,
+			'select'
+		);
+	}
+	
+	public static function textarea($name, $body = '', array $attributes = NULL, $double_encode = TRUE)
+	{
+		// if $attributes['label'] is set, append an html label and unset it
+		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+		
+		$inner .= parent::textarea($name, $body, $attributes, $double_encode);
+
+		return self::wrap(
+			$inner,
+			$name,
+			'textarea'
+		);
+	}
 }
