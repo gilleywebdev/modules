@@ -110,5 +110,25 @@ class Form extends Kohana_Form {
 			'textarea'
 		);
 	}
+	
+	public static function action($string)
+	{
+		if(isset($_POST))
+		{
+			if(isset($_POST['formaction']))
+			{
+				if($_POST['formaction'] === $string)
+				{
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+		}
+		else{
+			return false;
+		}
+	}
 
 }
