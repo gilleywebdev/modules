@@ -30,6 +30,12 @@ class Controller_Static extends Controller_Template {
 
 			// The page might be static plus, set content to the action for now
 			$this->template->content = View::factory('pages/'.$this->request->action());
+			
+			$query = DB::select()->from('seo')->where('pagename', '=', $this->pagename);
+			$seo = $query->execute()->as_array();
+
+			$this->title = $seo[0]['title'];
+			$this->description = $seo[0]['description'];
 		}
 	}
 

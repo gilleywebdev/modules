@@ -47,25 +47,36 @@ class Form extends Kohana_Form {
 	public static function text($name, $value = NULL, array $attributes = NULL)
 	{
 		// if $attributes['label'] is set, append an html label and unset it
-		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+		$inner = ($label = Form::intercept(&$attributes, 'label')) ? Form::label($name, $label) : '';
 
 		$inner .= parent::input($name, $value, $attributes);
 
-		return self::wrap(
+		return Form::wrap(
 			$inner,
 			$name,
 			'textbox'
+		);
+	}
+	
+	public static function date($name, $value = NULL, array $attributes = NULL)
+	{
+		$attributes['class'] = 'datepick';
+		
+		return Form::text(
+			$name,
+			$value,
+			$attributes
 		);
 	}
 
 	public static function password($name, $value = NULL, array $attributes = NULL)
 	{
 		// if $attributes['label'] is set, append an html label and unset it
-		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+		$inner = ($label = Form::intercept(&$attributes, 'label')) ? Form::label($name, $label) : '';
 		
 		$inner .= parent::password($name, $value, $attributes);
 
-		return self::wrap(
+		return Form::wrap(
 			$inner,
 			$name,
 			'password'
@@ -75,11 +86,11 @@ class Form extends Kohana_Form {
 	public static function file($name, array $attributes = NULL)
 	{
 		// if $attributes['label'] is set, append an html label and unset it
-		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+		$inner = ($label = Form::intercept(&$attributes, 'label')) ? Form::label($name, $label) : '';
 		
 		$inner .= parent::file($name, $attributes);
 
-		return self::wrap(
+		return Form::wrap(
 			$inner,
 			$name,
 			'file'
@@ -89,11 +100,11 @@ class Form extends Kohana_Form {
 	public static function select($name, array $options = NULL, $selected = NULL, array $attributes = NULL)
 	{
 		// if $attributes['label'] is set, append an html label and unset it
-		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+		$inner = ($label = Form::intercept(&$attributes, 'label')) ? Form::label($name, $label) : '';
 		
 		$inner .= parent::select($name, $options, $selected, $attributes);
 
-		return self::wrap(
+		return Form::wrap(
 			$inner,
 			$name,
 			'select'
@@ -103,14 +114,33 @@ class Form extends Kohana_Form {
 	public static function textarea($name, $body = '', array $attributes = NULL, $double_encode = TRUE)
 	{
 		// if $attributes['label'] is set, append an html label and unset it
-		$inner = ($label = self::intercept(&$attributes, 'label')) ? self::label($name, $label) : '';
+		$inner = ($label = Form::intercept(&$attributes, 'label')) ? Form::label($name, $label) : '';
 		
 		$inner .= parent::textarea($name, $body, $attributes, $double_encode);
 
-		return self::wrap(
+		return Form::wrap(
 			$inner,
 			$name,
 			'textarea'
 		);
+	}
+
+	public static function rte($name, $body = '', array $attributes = NULL, $double_encode = TRUE)
+	{
+		$attributes['class'] = 'wymeditor';
+		
+		return Form::textarea(
+			$name,
+			$body,
+			$attributes,
+			$double_encode
+		);
+	}
+	
+	public static function submit($name, $value, array $attributes = NULL)
+	{
+		$attributes['class'] = 'submit';
+
+		return Form::input($name, $value, $attributes);
 	}
 }
