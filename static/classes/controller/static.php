@@ -34,11 +34,8 @@ class Controller_Static extends Controller_Template {
 			$query = DB::select()->from('seo')->where('pagename', '=', $this->pagename);
 			$seo = $query->execute()->as_array();
 
-			if($seo)
-			{
-				$this->title = $seo[0]['title'];
-				$this->description = $seo[0]['description'];
-			}
+			$this->title = $seo[0]['title'];
+			$this->description = $seo[0]['description'];
 		}
 	}
 
