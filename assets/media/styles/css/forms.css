@@ -1,0 +1,29 @@
+.wrap {
+  margin: 7px 0; }
+  .wrap input, .wrap textarea {
+    border: 1px solid #373737;
+    background: #e1e1e1;
+    padding: 3px; }
+  .wrap textarea {
+    width: 400px;
+    height: 150px; }
+  .wrap label {
+    display: block;
+    width: 150px;
+    float: left; }
+
+.errors {
+  padding: 7px;
+  border: 1px solid #760000;
+  background: #ffb0b0;
+  color: #760000; }
+  .errors ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; }
+
+.textbox input {
+  width: 200px; }
+
+#honeypot_wrap {
+  display: none; }

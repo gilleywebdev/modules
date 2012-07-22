@@ -5,7 +5,7 @@ class Styles {
 
 	const POST_EXT = '.css';
 
-	const CSS_PATH = 'styles/css/';
+	const CSS_PATH = 'media/styles/css/';
 
 	const PROD_CSS_SHEET = 'styles.css';
 
@@ -25,26 +25,39 @@ class Styles {
 
 	public static function add($name, $priority = 20)
 	{	
-		if(in_array($name, Styles::$_sheets))
+		if (in_array($name, Styles::$_sheets))
 		{
 			return false;
 		}
 		else{
 			Styles::$_sheets[] = array(
 				'name' => $name,
-				'priority' => $priority,
+				'priority' => $priority
 			);
 			return true;
 		}
 	}
 	
-	public static function output()
-	{
+	public static function output($defaults = array())
+	{	
+		if($defaults)
+		{
+			foreach($defaults AS $default)
+			{
+				if(isset($default[1])){
+					Styles::add($default[0], $default[1]);
+				}
+				else{
+					Styles::add($default[0]);
+				}
+			}
+		}
+		
 		// Sort the sheets by priority
-		$sheets = Styles::sksort(Styles::$_sheets, 'priority');
+		$sheets = Styles::sksort(Styles::$_sheets, 'priority', TRUE);
 
 		// if production, everything below 20 should be in this
-		if(Kohana::$environment === Kohana::PRODUCTION)
+		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
 			echo HTML::style(Styles::CSS_PATH.Styles::PROD_CSS_SHEET);	
 		}
@@ -52,7 +65,7 @@ class Styles {
 		foreach($sheets AS $sheet)
 		{
 			// Dev: everything, Prod:priority > 20
-			if((Kohana::$environment !== Kohana::PRODUCTION) || ($sheet['priority'] > 20))
+			if ((Kohana::$environment !== Kohana::PRODUCTION) || ($sheet['priority'] > 20))
 			{
 				$path = Styles::CSS_PATH.$sheet['name'].Styles::POST_EXT;
 				echo HTML::style($path);
