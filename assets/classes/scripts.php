@@ -1,36 +1,28 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Styles {
-	const PRE_EXT = '.scss';
+class Scripts {
+	const EXT = '.js';
 
-	const POST_EXT = '.css';
+	const JS_PATH = 'media/scripts/js/';
 
-	const CSS_PATH = 'media/styles/css/';
-
-	const PROD_CSS_SHEET = 'styles.css';
-
-	const BASE = 0; // Reset, normalize, etc.
+	const PROD_JS_SCRIPT = 'script.js';
 	
-	const INCLUDED = 10; // Forms, colors
+	const FRAMEWORK = 0;
+	
+	const PLUGIN = 10;
+	
+	const CONTROLLER = 20;
 
-	const TEMPLATE = 20; // Global stylsheet
+	protected static $_scripts = array();
 
-	const CATEGORY = 30; // Subpage, admin
-
-	const PLUGIN = 40; // CSS for JS plugins
-
-	const PAGE = 50; // 1-page tweaks
-
-	protected static $_sheets = array();
-
-	public static function add($name, $priority = 20)
-	{	
-		if (in_array($name, Styles::$_sheets))
+	public static function add($name, $priority = 10)
+	{
+		if (in_array($name, Scripts::$_scripts))
 		{
 			return false;
 		}
 		else{
-			Styles::$_sheets[] = array(
+			Scripts::$_scripts[] = array(
 				'name' => $name,
 				'priority' => $priority
 			);
@@ -45,30 +37,28 @@ class Styles {
 			foreach($defaults AS $default)
 			{
 				if(isset($default[1])){
-					Styles::add($default[0], $default[1]);
+					Scripts::add($default[0], $default[1]);
 				}
 				else{
-					Styles::add($default[0]);
+					Scripts::add($default[0]);
 				}
 			}
 		}
 		
-		// Sort the sheets by priority
-		$sheets = Styles::sksort(Styles::$_sheets, 'priority', TRUE);
+		// Sort the scripts by priority
+		$scripts = Scripts::sksort(Scripts::$_scripts, 'priority', TRUE);
 
-		// if production, everything below 20 should be in this
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			echo HTML::style(Styles::CSS_PATH.Styles::PROD_CSS_SHEET);	
+			echo HTML::style(Scripts::JS_PATH.Scripts::PROD_JS_SCRIPT);	
 		}
 
-		foreach($sheets AS $sheet)
+		foreach($scripts AS $script)
 		{
-			// Dev: everything, Prod:priority > 20
-			if ((Kohana::$environment !== Kohana::PRODUCTION) || ($sheet['priority'] > 20))
+			if ((Kohana::$environment !== Kohana::PRODUCTION))
 			{
-				$path = Styles::CSS_PATH.$sheet['name'].Styles::POST_EXT;
-				echo HTML::style($path);
+				$path = Scripts::JS_PATH.$script['name'].Scripts::EXT;
+				echo HTML::script($path);
 			}
 		}
 	}
