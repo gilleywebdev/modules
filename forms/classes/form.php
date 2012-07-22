@@ -140,6 +140,7 @@ class Form extends Kohana_Form {
 	public static function submit($name, $value, array $attributes = NULL)
 	{
 		$attributes['class'] = 'submit';
+		$attributes['type'] = 'submit';
 
 		return Form::input($name, $value, $attributes);
 	}
