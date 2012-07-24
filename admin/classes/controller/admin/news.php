@@ -20,21 +20,4 @@ class Controller_admin_news extends Controller_Template {
 
 		$this->template->content = View::factory('admin/news/edit');
 	}
-	
-	public function after()
-		{
-			if ($this->auto_render)
-			{
-				// Get the media route
-				$media = Route::get('admin/media');
-
-				// Add styles
-				$this->template->styles = array(
-					$media->uri(array('file' => 'css/admin.css')) => 'screen',
-					$media->uri(array('file' => 'css/ui-lightness/jquery-ui-1.8.20.custom.css')) => 'screen',
-				);
-			}
-
-			return parent::after();
-		}
 }

@@ -4,8 +4,10 @@ class Styles {
 	const PRE_EXT = '.scss';
 
 	const POST_EXT = '.css';
+	
+	const FOLDER = 'media';
 
-	const CSS_PATH = 'media/styles/css/';
+	const CSS_PATH = 'styles/css';
 
 	const PROD_CSS_SHEET = 'styles.css';
 
@@ -23,7 +25,7 @@ class Styles {
 
 	protected static $_sheets = array();
 
-	public static function add($name, $priority = 20)
+	public static function add($name, $priority = 20, $prefix = '')
 	{	
 		if (in_array($name, Styles::$_sheets))
 		{
@@ -32,19 +34,23 @@ class Styles {
 		else{
 			Styles::$_sheets[] = array(
 				'name' => $name,
-				'priority' => $priority
+				'priority' => $priority,
+				'prefix' => $prefix,
 			);
 			return true;
 		}
 	}
 	
 	public static function output($defaults = array())
-	{	
+	{
 		if($defaults)
 		{
 			foreach($defaults AS $default)
 			{
-				if(isset($default[1])){
+				if(isset($default[2])){
+					Styles::add($default[0], $default[1], $default[2]);
+				}
+				elseif(isset($default[1])){
 					Styles::add($default[0], $default[1]);
 				}
 				else{
@@ -64,10 +70,12 @@ class Styles {
 
 		foreach($sheets AS $sheet)
 		{
+			$prefix = $sheet['prefix']? $sheet['prefix'].'/' : '';
 			// Dev: everything, Prod:priority > 20
 			if ((Kohana::$environment !== Kohana::PRODUCTION) || ($sheet['priority'] > 20))
 			{
-				$path = Styles::CSS_PATH.$sheet['name'].Styles::POST_EXT;
+				// Set the path up
+				$path = Styles::FOLDER.'/'.$prefix.Styles::CSS_PATH.'/'.$sheet['name'].Styles::POST_EXT;
 				echo HTML::style($path);
 			}
 		}

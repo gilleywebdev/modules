@@ -1,29 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<?php //echo View::factory('admin/includes/header'); ?>
-		<?php foreach ($styles as $style => $media) echo HTML::style($style, array('media' => $media), NULL, TRUE), "\n" ?>
- 
-		<script type="text/javascript" src="/admin/media/js/jquery-1.7.2.min.js"></script>
-		<script type="text/javascript" src="/admin/media/js/jquery-ui-1.8.20.custom.min.js"></script>
-		<script type="text/javascript" src="/admin/media/js/wymeditor/jquery.wymeditor.js"></script>		
-		<script type="text/javascript" src="/admin/media/js/admin.js"></script>
-		<title><?php echo $title; ?></title>
+		<?php echo View::factory('admin/includes/header')
+				->bind('title', $title) ?>
 	</head>
-	<body id="<?php echo Request::current()->action(); ?>">
-		<div id="wrapper">
-			<div id="navigation">
+	<body class="<?php echo Request::current()->action(); ?>_page">
+		<div class="wrapper">
+			<div class="menu">
 				<?php echo View::factory('admin/includes/navigation'); ?>
 			</div>
-			<div id="content">
-				<div id="page_title" class="clear">
-					<h2><?php echo $title; ?></h2>
-					<h3>Logged in as <a href="/admin/user" title="User">chris</a>. <a href="/admin/logout">Log out</a></h3>
+			<div class="content">
+				<div class="header clear">
+					<h2 class="page_title"><?php echo $title; ?></h2>
+					<h3 class="user_info">Logged in as <a href="/admin/user" title="User" class="user_info_link">chris</a>. <a href="/admin/logout" class="user_info_link">Log out</a></h3>
 				</div>
-				<div id="inner_content">
+				<div class="inner_content">
 					<?php echo $content; ?>
 				</div>
 			</div>
 		</div>
 	</body>
 </html>
+<?php Scripts::output() ?>
