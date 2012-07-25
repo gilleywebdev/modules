@@ -80,15 +80,41 @@ body {
   list-style-type: none;
   float: left;
   width: 121px;
-  margin: 5px 10px 5px 20px; }
+  margin: 5px 10px 5px 20px;
+  position: relative; }
+
+.nav_item:before {
+  position: absolute;
+  content: url("/media/admin/graphics/button.png");
+  background-image: url("/media/admin/graphics/icons.png");
+  background-position: -29px 6px;
+  height: 40px;
+  width: 40px; }
+
+.nav_item:hover:before {
+  content: url("/media/admin/graphics/button-hover.png"); }
+
+.nav_item:hover .nav_item_link {
+  color: #9C2F23; }
 
 .nav_item_link {
+  position: relative;
+  z-index: 1;
   color: #033E6B;
   font-size: 14pt;
   text-decoration: none; }
 
-.nav_item_link:hover {
-  color: #9C2F23; }
+.news:before {
+  background-position: -354px -534px; }
+
+.seo:before {
+  background-position: -426px -66px; }
+
+.users:before {
+  background-position: -246px -138px; }
+
+.info:before {
+  background-position: -462px -426px; }
 
 .inner_content {
   padding: 10px 20px; }
@@ -138,7 +164,6 @@ body {
   box-shadow: 3px 4px 7px -2px #444444;
   float: left;
   clear: left;
-  width: 50px;
   border: 0; }
 
 .submit:hover {
@@ -243,21 +268,18 @@ table .edit_header {
 .spacing {
   height: 50px; }
 
-.menu .news {
-  height: 50px;
-  background-image: url("/media/admin/graphics/news.png");
-  background-position: top left;
-  background-repeat: no-repeat; }
+.nav_item {
+  height: 50px; }
 
-.menu .news a {
+.nav_item {
+  background-position: bottom left; }
+
+.nav_item_link {
   display: block;
   padding-left: 56px;
   width: 100px;
   padding-top: 14px;
   padding-bottom: 20px; }
-
-.menu .news:hover {
-  background-position: bottom left; }
 
 .wym_box {
   float: left;

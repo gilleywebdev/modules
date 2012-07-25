@@ -20,8 +20,8 @@
 				}
 				echo '<td class="first">'.date('M d, Y', $story->date).'</td>';
 				echo '<td>'.$story->headline.'</td>';
-				echo '<td class="edit"><a href="/admin/news/edit/'.$story->id.'" title="Edit"><img src="/admin/media/graphics/edit.png" alt="Edit"></td>';
-				echo '<td class="delete last"><a href="/adminpost/news/delete/'.$story->id.'" title="Delete"><img src="/admin/media/graphics/delete.png" alt="Delete"></td>';
+				echo '<td class="edit"><a href="/admin/news/edit/'.$story->id.'" title="Edit"><img src="/media/admin/graphics/edit.png" alt="Edit"></td>';
+				echo '<td class="delete last"><a href="/adminpost/news/delete/'.$story->id.'" title="Delete"><img src="/media/admin/graphics/delete.png" alt="Delete"></td>';
 				echo '</tr>';
 				$i++;
 			}
