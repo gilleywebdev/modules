@@ -23,4 +23,10 @@ class Controller_Admin_User extends Controller_Template {
 		$this->template->content = View::factory('admin/login');
 		$this->template->title = 'Login';
 	}
+	
+	public function action_logout()
+	{
+		Auth::instance()->logout();
+		$this->request->redirect('admin/user/login');
+	}
 }
