@@ -19,13 +19,13 @@ class Form extends Kohana_Form {
 		}
 	}
 
-	public static function have($string)
+	public static function is_posted()
 	{
 		if (isset($_POST))
 		{
-			if (isset($_POST['formaction']))
+			if (isset($_POST['is_posted']))
 			{
-				if ($_POST['formaction'] === $string)
+				if ($_POST['is_posted'] === 'TRUE')
 				{
 					return true;
 				}
@@ -39,9 +39,16 @@ class Form extends Kohana_Form {
 		}
 	}
 	
-	public static function action($string)
+	public static function action()
 	{
-		return Form::hidden('formaction', $string);
+		return Form::hidden('is_posted', 'TRUE');
+	}
+	
+	public static function open($action = NULL, array $attributes = NULL)
+	{
+		$return = parent::open($action, $attributes);
+		$return .= Form::action();
+		return $return;
 	}
 
 	public static function text($name, $value = NULL, array $attributes = NULL)

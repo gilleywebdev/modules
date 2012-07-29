@@ -5,7 +5,7 @@ class Controller_Admin_User extends Controller_Template {
 
 	public function action_login()
 	{
-		if(Form::have('login'))
+		if(Form::is_posted())
 		{
 			$post = $this->request->post();
 			$success = Auth::instance()->login($post['username'], $post['password']);
