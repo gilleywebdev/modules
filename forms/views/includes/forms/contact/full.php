@@ -1,13 +1,5 @@
 <?php
-	if($errors)
-	{
-		echo '<div class="errors"><ul>';
-		foreach($errors AS $message)
-		{
-			echo '<li>'.$message.'</li>';
-		}
-		echo '</ul></div>';
-	}
+	echo View::factory('includes/forms/errors');
 	echo Form::open('contact');
 	echo Form::text('name', NULL, array('label' => 'Name'));
 	echo Form::text('email', NULL, array('label' => 'Email'));
