@@ -79,7 +79,7 @@ class Form extends Kohana_Form {
 		return Form::wrap(
 			$inner,
 			$name,
-			'password'
+			'textbox'
 		);
 	}
 

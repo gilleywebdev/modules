@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><?php echo $title; ?></title>
+		<?php echo View::factory('admin/includes/header')
+				->bind('title', $title) ?>
 	</head>
 	<body class="<?php echo Request::current()->action(); ?>_page">
 		<div class="wrapper">

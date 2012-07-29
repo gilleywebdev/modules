@@ -11,7 +11,13 @@ Route::set('admin-news', 'admin/news(/<action>)(/<var>)')
 		'controller' => 'admin_news',
 		'action'     => 'index',
 	));
-	
+
+Route::set('adminpost-login', 'adminpost/login(/<action>)(/<var>)')
+	->defaults(array(
+		'controller' => 'adminpost_login',
+		'action' => 'login'
+	));
+
 Route::set('adminpost-news', 'adminpost/news(/<action>)(/<var>)')
 	->defaults(array(
 		'controller' => 'adminpost_news',
