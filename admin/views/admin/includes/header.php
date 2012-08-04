@@ -6,7 +6,7 @@
 <!-- Styles -->
 <?php Styles::output(array(
 		array('normalize', Styles::BASE),
-		array('template', Styles::TEMPLATE, 'admin'),
+		array(array('admin', 'template'), Styles::TEMPLATE),
 	)) ?>
 
 <!-- Vanity -->

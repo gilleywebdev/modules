@@ -2,8 +2,10 @@
 
 class Scripts {
 	const EXT = '.js';
+	
+	const MEDIA_FOLDER = 'media/';
 
-	const JS_PATH = 'media/scripts/js/';
+	const JS_PATH = 'scripts/js/';
 
 	const PROD_JS_SCRIPT = 'script.js';
 	
@@ -15,34 +17,54 @@ class Scripts {
 
 	protected static $_scripts = array();
 
-	public static function add($name, $priority = 10)
+	public static function add($name, $priority = Scripts::PlUGIN )
 	{
 		if (in_array($name, Scripts::$_scripts))
 		{
 			return false;
 		}
 		else{
+			if(is_array($name))
+			{
+				$prefix = $name[0];
+				$name = $name[1];
+			}
+			else{
+				$prefix = NULL;
+			}
+
 			Scripts::$_scripts[] = array(
 				'name' => $name,
-				'priority' => $priority
+				'priority' => $priority,
+				'prefix' => $prefix,
 			);
+
 			return true;
 		}
 	}
 	
 	public static function output($defaults = array())
 	{	
-		if($defaults)
+		if(is_array($defaults))
 		{
 			foreach($defaults AS $default)
 			{
-				if(isset($default[1])){
-					Scripts::add($default[0], $default[1]);
+				if(is_array($default))
+				{
+					if(isset($default[1])){
+						Scripts::add($default[0], $default[1]);
+					}
+					else{
+						Scripts::add($default[0]);
+					}
 				}
 				else{
-					Scripts::add($default[0]);
+					throw new Kohana_Exception('Expected array');
 				}
 			}
+		}
+		else{
+			throw new Kohana_Exception('Expected array');
 		}
 		
 		// Sort the scripts by priority
@@ -55,9 +77,11 @@ class Scripts {
 
 		foreach($scripts AS $script)
 		{
+			$prefix = $script['prefix']? $script['prefix'].'/' : '';
+			
 			if ((Kohana::$environment !== Kohana::PRODUCTION))
 			{
-				$path = Scripts::JS_PATH.$script['name'].Scripts::EXT;
+				$path = Scripts::MEDIA_FOLDER.$prefix.Scripts::JS_PATH.$script['name'].Scripts::EXT;
 				echo HTML::script($path);
 			}
 		}

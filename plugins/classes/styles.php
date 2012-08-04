@@ -5,9 +5,9 @@ class Styles {
 
 	const POST_EXT = '.css';
 	
-	const FOLDER = 'media';
+	const MEDIA_FOLDER = 'media/';
 
-	const CSS_PATH = 'styles/css';
+	const CSS_PATH = 'styles/css/';
 
 	const PROD_CSS_SHEET = 'styles.css';
 
@@ -25,38 +25,58 @@ class Styles {
 
 	protected static $_sheets = array();
 
-	public static function add($name, $priority = 20, $prefix = '')
+	public static function add($name, $priority = Styles::TEMPLATE)
 	{	
 		if (in_array($name, Styles::$_sheets))
 		{
 			return false;
 		}
 		else{
+			if(is_array($name))
+			{
+				$prefix = $name[0];
+				$name = $name[1];
+			}
+			else{
+				$prefix = NULL;
+			}
+
 			Styles::$_sheets[] = array(
 				'name' => $name,
 				'priority' => $priority,
 				'prefix' => $prefix,
 			);
+			
 			return true;
 		}
 	}
 	
 	public static function output($defaults = array())
 	{
-		if($defaults)
+		if(is_array($defaults))
 		{
 			foreach($defaults AS $default)
 			{
-				if(isset($default[2])){
-					Styles::add($default[0], $default[1], $default[2]);
-				}
-				elseif(isset($default[1])){
-					Styles::add($default[0], $default[1]);
+				if(is_array($default))
+				{
+					if(isset($default[2])){
+						Styles::add($default[0], $default[1], $default[2]);
+					}
+					elseif(isset($default[1])){
+						Styles::add($default[0], $default[1]);
+					}
+					else{
+						Styles::add($default[0]);
+					}
 				}
 				else{
-					Styles::add($default[0]);
+					throw new Kohana_Exception('Expected array');
 				}
 			}
+		}
+		else
+		{
+			throw new Kohana_Exception('Expected array');
 		}
 		
 		// Sort the sheets by priority
@@ -75,7 +95,7 @@ class Styles {
 			if ((Kohana::$environment !== Kohana::PRODUCTION) || ($sheet['priority'] > 20))
 			{
 				// Set the path up
-				$path = Styles::FOLDER.'/'.$prefix.Styles::CSS_PATH.'/'.$sheet['name'].Styles::POST_EXT;
+				$path = Styles::MEDIA_FOLDER.$prefix.Styles::CSS_PATH.$sheet['name'].Styles::POST_EXT;
 				echo HTML::style($path);
 			}
 		}

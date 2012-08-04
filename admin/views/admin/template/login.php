@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<?php 
-			Styles::add('login', Styles::PAGE, 'admin');
+			Styles::add(array('admin', 'login'), Styles::PAGE);
 		
 			echo View::factory('admin/includes/header')
 					->bind('title', $title)
@@ -21,6 +21,7 @@
 					echo Form::close();
 				?>
 			</div>
+			<p><a href="/admin/auth/lost-password">Lost password?</a></p>
 		</div>
 	</body>
 </html>
