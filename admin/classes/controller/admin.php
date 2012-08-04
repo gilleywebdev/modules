@@ -7,9 +7,14 @@ class Controller_Admin extends Controller_Template {
 	{
 		parent::before();
 		
-		if ( ! Auth::instance()->logged_in())
+		$this->user = Auth::instance()->get_user();
+		if ( $this->user === null )
 		{
-			$this->request->redirect('admin/user/login');
+			$this->request->redirect('admin/auth/login');
+		}
+		else
+		{
+			View::bind_global('user', $this->user);
 		}
 	}
 }
