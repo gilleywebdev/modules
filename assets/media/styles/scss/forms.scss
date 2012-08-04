@@ -19,17 +19,34 @@
 	}
 }
 
-.errors{
+$error_color: #760000;
+$success_color: #1c9300;
+
+.result{
 	padding:7px;
-	border:1px solid #760000;
-	background:#ffb0b0;
-	color:#760000;
-	
+	display:inline-block;
+	border: {
+		width:1px;
+		style:solid;
+	}
+
 	ul{
 		list-style-type:none;
 		padding:0;
 		margin:0;
 	}
+}
+
+.errors{
+	background: #ffb0b0;
+	border-color: $error_color;
+	color: $error_color;
+}
+
+.success{
+	background:#bfffab;
+	border-color: $success_color;
+	color: $success_color;
 }
 
 .textbox input{

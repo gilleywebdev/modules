@@ -17,10 +17,14 @@ class Controller_Admin_User extends Controller_Admin {
 				$user = ORM::factory('user', $id);
 				$user->password = $post['password1'];
 				$user->save();
+				
+				$success = array(Kohana::message('success', 'password_changed'));
+				View::bind_global('success', $success);
 			}
-			
-			$errors = $post->errors('contact');
-			View::bind_global('errors', $errors);
+			else{
+				$errors = $post->errors('contact');
+				View::bind_global('errors', $errors);
+			}
 		}
 		
 		$this->template->title = 'Profile';

@@ -12,15 +12,25 @@
     width: 150px;
     float: left; }
 
-.errors {
+.result {
   padding: 7px;
-  border: 1px solid #760000;
-  background: #ffb0b0;
-  color: #760000; }
-  .errors ul {
+  display: inline-block;
+  border-width: 1px;
+  border-style: solid; }
+  .result ul {
     list-style-type: none;
     padding: 0;
     margin: 0; }
+
+.errors {
+  background: #ffb0b0;
+  border-color: #760000;
+  color: #760000; }
+
+.success {
+  background: #bfffab;
+  border-color: #1c9300;
+  color: #1c9300; }
 
 .textbox input {
   width: 200px; }

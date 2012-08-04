@@ -171,50 +171,6 @@ h2 {
 .submit:hover {
   background: #9C2F23; }
 
-.login {
-  margin: 150px auto 0;
-  width: 280px;
-  padding: 10px;
-  background: url("../graphics/gradient.jpg") repeat-x;
-  border-radius: 15px;
-  border: 2px solid black; }
-
-.login h1 {
-  padding-bottom: 10px; }
-
-.login .form .textbox input, #login .form .passwordbox input {
-  color: #000; }
-
-.login .form {
-  width: 265px; }
-
-.login .form label {
-  color: #fff; }
-
-.login .form .submitbox {
-  float: right;
-  padding: 5px 0 0; }
-
-.login .form .submitbox input {
-  border-color: #fff; }
-
-.errormessages {
-  margin: 0 0 10px 20px;
-  padding: 10px;
-  background: #ffb3b3;
-  border: 1px solid #ff0b0b;
-  width: 370px; }
-
-.successmessages {
-  margin: 0 0 15px 20px;
-  padding: 10px;
-  background: #bfffab;
-  border: 1px solid #1c9300;
-  width: 370px; }
-
-.login #errormessages, #login #successmessages {
-  width: 240px; }
-
 table {
   margin: 20px 0; }
 
