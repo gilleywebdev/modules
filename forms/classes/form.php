@@ -151,4 +151,18 @@ class Form extends Kohana_Form {
 
 		return Form::input($name, $value, $attributes);
 	}
+	
+	public static function checkbox($name, $value = NULL, $checked = FALSE, array $attributes = NULL)
+	{
+		// if $attributes['label'] is set, append an html label and unset it
+		$inner = ($label = Form::intercept(&$attributes, 'label')) ? Form::label($name, $label) : '';
+
+		$inner .= parent::checkbox($name, $value, $checked, $attributes);
+
+		return Form::wrap(
+			$inner,
+			$name,
+			'checkbox'
+		);
+	}
 }

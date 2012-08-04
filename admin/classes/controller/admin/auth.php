@@ -9,7 +9,8 @@ class Controller_Admin_Auth extends Controller_Template {
 		if(Form::is_posted())
 		{
 			$post = $this->request->post();
-			$success = Auth::instance()->login($post['username'], $post['password']);
+			$rm = isset($post['remember_me']) ? $post['remember_me'] : '';
+			$success = Auth::instance()->login($post['username'], $post['password'], $rm);
 
 			if ($success)
 			{
