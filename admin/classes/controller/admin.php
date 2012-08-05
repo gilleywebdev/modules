@@ -8,7 +8,7 @@ class Controller_Admin extends Controller_Template {
 		parent::before();
 		
 		$this->user = Auth::instance()->get_user();
-		if ( $this->user === null )
+		if ( ! is_object($this->user))
 		{
 			$this->request->redirect('admin/auth/login');
 		}
