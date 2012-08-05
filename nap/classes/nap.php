@@ -1,9 +1,9 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Nap{
-	public static function info($key)
+	public static function get($key)
 	{
-		$nap = Kohana::$config->load('nap');
+		$nap = Kohana::$config->load('nap/values');
 		if($key == 'address')
 		{
 			return View::factory('includes/address')
