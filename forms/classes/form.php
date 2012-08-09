@@ -3,7 +3,7 @@
 class Form extends Kohana_Form {	
 	private static function wrap($string, $name, $class)
 	{
-		return '<div id="'.$name.'_wrap" class="'.$class.' wrap">'.$string.'</div>';
+		return '<div class="'.$name.' '.$class.' wrap">'.$string.'</div>';
 	}
 	
 	private static function intercept($attributes, $key)
@@ -56,7 +56,7 @@ class Form extends Kohana_Form {
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept(&$attributes, 'label')) ? Form::label($name, $label) : '';
 
-		$inner .= parent::input($name, $value, $attributes);
+		$inner .= Form::input($name, $value, $attributes);
 
 		return Form::wrap(
 			$inner,
@@ -146,8 +146,8 @@ class Form extends Kohana_Form {
 	
 	public static function submit($name, $value, array $attributes = NULL)
 	{
-		$attributes['class'] = 'submit';
 		$attributes['type'] = 'submit';
+		$attributes['class'] = 'submit';
 
 		return Form::input($name, $value, $attributes);
 	}
