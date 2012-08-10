@@ -107,6 +107,9 @@ h2 {
   font-size: 14pt;
   text-decoration: none; }
 
+.home:before {
+  background-position: -318px 6px; }
+
 .news:before {
   background-position: -354px -534px; }
 
