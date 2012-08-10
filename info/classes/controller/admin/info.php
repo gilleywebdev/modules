@@ -5,9 +5,9 @@ class Controller_Admin_Info extends Controller_Admin {
 	
 	public function action_index()
 	{
-		$labels = Kohana::$config->load('nap/labels')->as_array();
+		$labels = Kohana::$config->load('info/labels')->as_array();
 
-		$config = Kohana::$config->load('nap/values');
+		$config = Kohana::$config->load('info/values');
 
 		if(Form::is_posted())
 		{
@@ -20,7 +20,7 @@ class Controller_Admin_Info extends Controller_Admin {
 					$config->set($key, $post[$key]);
 				}
 
-				Kohana::$config->copy('nap');
+				Kohana::$config->copy('info');
 				
 				$success = array(Kohana::message('success', 'info_updated'));
 				View::bind_global('success', $success);
