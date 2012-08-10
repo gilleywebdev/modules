@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Admin_Auth extends Controller_Template {
-	public $template = 'admin/template/login';
+	public $template = 'admin/auth/login';
 
 	public function action_login()
 	{
@@ -23,6 +23,12 @@ class Controller_Admin_Auth extends Controller_Template {
 		}
 
 		$this->template->title = 'Login';
+	}
+	
+	public function action_forgotpassword()
+	{
+		$this->template = View::factory('admin/auth/forgotpassword');
+		$this->template->title = 'Forgot Password';
 	}
 
 	public function action_logout()

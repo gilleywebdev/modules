@@ -21,7 +21,7 @@
 					echo Form::close();
 				?>
 			</div>
-			<p><a href="/admin/auth/lost-password">Lost password?</a></p>
+			<p><a href="/admin/auth/forgotpassword">Forgot password?</a></p>
 		</div>
 	</body>
 </html>
