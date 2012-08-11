@@ -1,3 +1,4 @@
+<?php echo View::factory('includes/forms/errors') ?>
 <p><a class="button" href="/admin/user/add">Add User</a></p>
 <div class="clear"></div>
 <table>
