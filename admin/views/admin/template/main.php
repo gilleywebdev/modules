@@ -12,7 +12,7 @@
 			<div class="content">
 				<div class="header clear">
 					<h2 class="page_title"><?php echo $title; ?></h2>
-					<h3 class="user_info">Logged in as <a href="/admin/user/profile" title="User" class="user_info_link"><?php echo $user->username ?></a>. <a href="/admin/auth/logout" class="user_info_link">Logout</a></h3>
+					<h3 class="user_info">Logged in as <a href="/admin/user/profile" title="User" class="user_info_link"><?php echo $me->username ?></a>. <a href="/admin/auth/logout" class="user_info_link">Logout</a></h3>
 				</div>
 				<div class="inner_content">
 					<?php echo $content ?>

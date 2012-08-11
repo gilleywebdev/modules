@@ -60,16 +60,15 @@ class Controller_Admin_User extends Controller_Admin {
 		{
 			$post = Validation::factory($this->request->post())
 				->rule('username', 'not_empty')
-				->rule('email', 'not_empty')
-			    ->rule('password2', 'matches', array(':validation', ':field', 'password1'));
+				->rule('email', 'not_empty');
 
 			if($post->check())
 			{
 				$user = ORM::factory('user');
 				$user->username = $post['username'];
 				$user->email = $post['email'];
-				$user->password = $post['password1'];
-				
+				$user->password = '';
+
 				$user->save();
 
 				$user->add('roles', ORM::factory('role', array('name' => 'login')));
@@ -84,6 +83,35 @@ class Controller_Admin_User extends Controller_Admin {
 		
 		$this->template->content = View::factory('admin/user/add');
 		$this->template->title = 'Add User';
+	}
+	
+	public function action_edit()
+	{
+		$user = ORM::factory('user', $this->request->param('var'));
+
+		if(Form::is_posted())
+		{
+			$post = Validation::factory($this->request->post())
+				->rule('email', 'not_empty');
+
+			if($post->check())
+			{
+				$user->email = $post['email'];
+
+				$user->save();
+
+				$user->add('roles', ORM::factory('role', array('name' => 'login')));
+
+				$this->request->redirect('/admin/user');
+			}
+			else{
+				$errors = $post->errors('contact');
+				View::bind_global('errors', $errors);
+			}
+		}
+		
+		$this->template->content = View::factory('admin/user/edit')->bind('user', $user);
+		$this->template->title = 'Edit User';
 	}
 	
 	public function action_delete()

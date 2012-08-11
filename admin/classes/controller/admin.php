@@ -14,7 +14,7 @@ class Controller_Admin extends Controller_Template {
 		}
 		else
 		{
-			View::bind_global('user', $this->user);
+			View::bind_global('me', $this->user);
 		}
 	}
 }
