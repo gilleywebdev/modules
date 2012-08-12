@@ -5,7 +5,6 @@ class Controller_Admin_Auth extends Controller_Template {
 
 	public function action_login()
 	{
-		// Post
 		if(Form::is_posted())
 		{
 			$post = $this->request->post();

@@ -33,6 +33,7 @@ class Controller_Admin_User extends Controller_Admin {
 	
 	public function action_index()
 	{
+		// Get the list of users
 		$obj = ORM::factory('user');
 		$all_user_objs = $obj->find_all();
 		
@@ -46,11 +47,25 @@ class Controller_Admin_User extends Controller_Admin {
 			$users[] = array('obj' => $user_obj, 'stripe' => $stripe);
 		}
 
-		$message = $this->request->param('var');
-		if($message)
+		// Messaging Center
+		$message_type = $this->request->param('var');
+		$message = $this->request->param('subvar');
+		
+		if($message_type === 'success')
 		{
-			$success = array(Kohana::message('admin/user', $message));
-			View::bind_global('success', $success);
+			if($message)
+			{
+				$success = array(Kohana::message('admin/user/success', $message));
+				View::set_global('success', $success);
+			}
+		}
+		elseif($message_type === 'error')
+		{
+			if($message)
+			{
+				$errors = array(Kohana::message('admin/user/error', $message));
+				View::set_global('errors', $errors);
+			}
 		}
 
 		$this->template->content = View::factory('admin/user/index');
@@ -75,13 +90,13 @@ class Controller_Admin_User extends Controller_Admin {
 				$user = ORM::factory('user');
 				$user->username = $post['username'];
 				$user->email = $post['email'];
-				$user->password = '';
+				$user->password = $post['password'];
 
 				$user->save();
 
 				$user->add('roles', ORM::factory('role', array('name' => 'login')));
 
-				$this->request->redirect('/admin/user/index/added');
+				$this->request->redirect('/admin/user/index/success/added');
 			}
 			else{
 				$errors = $post->errors('contact');
@@ -108,7 +123,7 @@ class Controller_Admin_User extends Controller_Admin {
 
 				$user->save();
 
-				$this->request->redirect('/admin/user/index/edited');
+				$this->request->redirect('/admin/user/index/success/edited');
 			}
 			else{
 				$errors = $post->errors('contact');
@@ -123,27 +138,37 @@ class Controller_Admin_User extends Controller_Admin {
 	public function action_delete()
 	{
 		$user = ORM::factory('user', $this->request->param('var'));
-		
-		if(Form::is_posted())
+		if($this->user->id === $user->id)
 		{
-			$post = $this->request->post();
-
-			if($post['response'] === 'yes')
-			{
-				$id = $this->request->param('var');
-				$obj = ORM::factory('user')->where('id', '=', $id)->find();
-				$obj->delete();
-
-				$this->request->redirect('/admin/user/index/deleted');
-			}
-			else{
-				$this->request->redirect('/admin/user/');
-			}
+			$this->request->redirect('/admin/user/index/error/deleteself');
 		}
+		elseif($user->username === 'chris')
+		{
+			$this->request->redirect('/admin/user/index/error/deletechris');
+		}
+		else
+		{
+			if(Form::is_posted())
+			{
+				$post = $this->request->post();
+
+				if($post['response'] === 'yes')
+				{
+					$id = $this->request->param('var');
+					$obj = ORM::factory('user')->where('id', '=', $id)->find();
+					$obj->delete();
+
+					$this->request->redirect('/admin/user/index/success/deleted');
+				}
+				else{
+					$this->request->redirect('/admin/user/');
+				}
+			}
 		
-		Styles::add(array('admin', 'delete'), Styles::PAGE);
+			Styles::add(array('admin', 'delete'), Styles::PAGE);
 		
-		$this->template->content = View::factory('admin/user/delete')->bind('user', $user);
-		$this->template->title = 'Delete User';
+			$this->template->content = View::factory('admin/user/delete')->bind('user', $user);
+			$this->template->title = 'Delete User';
+		}
 	}
 }
