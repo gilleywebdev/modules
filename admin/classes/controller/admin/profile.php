@@ -6,6 +6,7 @@ class Controller_Admin_Profile extends Controller_Admin {
 		// Post
 		if($post = Form::post())
 		{
+			// Rules
 			$post->rule('password2', 'matches', array(':validation', ':field', 'password1'));
 
 			if($post->check())
