@@ -1,27 +1,32 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Admin_Auth extends Controller_Template {
-	public $template = 'admin/auth/login';
-
+class Controller_Admin_Auth extends Controller {
 	public function action_login()
 	{
 		if(Form::is_posted())
 		{
 			$post = $this->request->post();
-			$rm = isset($post['remember_me']) ? $post['remember_me'] : '';
-			$success = Auth::instance()->login($post['username'], $post['password'], $rm);
+			$success = Auth::instance()->login($post['username'], $post['password'], isset($post['remember_me']));
 
 			if ($success)
 			{
 			  $this->request->redirect('admin');
 			}
-
-			$errors = array('Incorrect login/pass');
-		
-			View::bind_global('errors', $errors);
+			else{
+				$errors = array(Kohana::message('admin/auth', 'bad_login'));
+				View::bind_global('errors', $errors);
+			}
 		}
 
+		$this->template = View::factory('admin/auth/login');
 		$this->template->title = 'Login';
+		$this->response->body($this->template->render());
+	}
+
+	public function action_logout()
+	{
+		Auth::instance()->logout();
+		$this->request->redirect('admin/auth/login');
 	}
 	
 	public function action_forgotpassword()
@@ -57,11 +62,6 @@ class Controller_Admin_Auth extends Controller_Template {
 		
 		$this->template = View::factory('admin/auth/forgotpassword');
 		$this->template->title = 'Forgot Password';
-	}
-
-	public function action_logout()
-	{
-		Auth::instance()->logout();
-		$this->request->redirect('admin/auth/login');
+		$this->response->body($this->template->render());
 	}
 }

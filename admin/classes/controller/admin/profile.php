@@ -1,8 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Admin_Profile extends Controller_Admin {
-	public $template = 'admin/template/main';
-
 	public function action_index()
 	{
 		$id = $this->user->id;
