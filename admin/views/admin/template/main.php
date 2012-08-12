@@ -7,6 +7,7 @@
 	<body class="<?php echo Request::current()->action(); ?>_page">
 		<div class="wrapper">
 			<div class="menu">
+				<h1 class="site_name"><a href="/admin/" title="Site Name" class="site_name_link"><?php echo $header; ?></a></h1>
 				<?php echo View::factory('admin/includes/navigation'); ?>
 			</div>
 			<div class="content">
