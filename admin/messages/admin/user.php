@@ -6,5 +6,4 @@ return array(
 	'deleted' => 'User successfully deleted',
 	'edited' => 'User successfully edited',
 	'added' => 'User successfully added',
-	'password_changed' => 'You successfully changed your password',
 );
