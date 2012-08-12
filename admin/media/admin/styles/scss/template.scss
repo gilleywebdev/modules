@@ -226,11 +226,11 @@ table th{
 	border-bottom:1px solid #3f3f3f;
 }
 
-table tr.odd{
+tbody tr:nth-child(odd){
 	background:#e3e3e3;
 }
 
-table tr.even{
+tbody tr:nth-child(even){
 	background:#f7f7f7;
 }
 
