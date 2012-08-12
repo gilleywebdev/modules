@@ -3,27 +3,29 @@
 class Controller_Admin_Profile extends Controller_Admin {
 	public function action_index()
 	{
-		$id = $this->me->id;
-
+		// Post
 		if($post = Form::post())
 		{
 			$post->rule('password2', 'matches', array(':validation', ':field', 'password1'));
 
 			if($post->check())
 			{
-				$user = ORM::factory('user', $id);
+				// Save profile
+				$user = ORM::factory('user', $this->me->id);
 				$user->password = $post['password1'];
 				$user->save();
 				
-				$success = array(Kohana::message('admin/profile', 'profile_updated'));
-				View::bind_global('success', $success);
+				// Success
+				Form::success('admin/profile', 'profile_updated');
 			}
 			else{
+				// Failure
 				$errors = $post->errors('contact');
 				View::bind_global('errors', $errors);
 			}
 		}
 		
+		// View
 		$this->template->title = 'Profile';
 		$this->template->content = View::factory('admin/profile/index');
 	}

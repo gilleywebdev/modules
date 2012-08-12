@@ -3,6 +3,7 @@
 class Controller_Admin_Dashboard extends Controller_Admin {
 	public function action_index()
 	{
+		// View
 		$this->template->content = View::factory('admin/index');
 		$this->template->title = 'Dashboard';
 	}
