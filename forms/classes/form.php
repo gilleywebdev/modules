@@ -1,24 +1,50 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Form extends Kohana_Form {	
-	private static function wrap($string, $name, $class)
-	{
-		return '<div class="'.$name.' '.$class.' wrap">'.$string.'</div>';
-	}
+	protected static $_success;
 	
-	private static function intercept($attributes, $key)
+	protected static $_errors = array();
+
+	public static function success($file, $path = NULL, $default = NULL)
 	{
-		if (isset($attributes[$key]))
+		if( $message = Kohana::message($file, $path, $default))
 		{
-			$return = $attributes[$key];
-			unset($attributes[$key]);
-			return $return;
+			Form::$_success = $message;
+			return true;
 		}
 		else{
 			return false;
 		}
 	}
+	
+	public static function error($file, $path = NULL, $default = NULL)
+	{
+		if( $message = Kohana::message($file, $path, $default))
+		{
+			Form::$_errors[] = $message;
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public static function show($type = 'error')
+	{
+		if($type == 'error')
+		{
+			return Form::$_errors;
+		}
+		elseif($type = 'success')
+		{
+			return Form::$_success;
+		}
+		else{
+			throw new Kohana_Exception('type must be success or error');
+		}
+	}
 
+	/* Flow control */
 	public static function post()
 	{
 		$post = Request::current()->post();
@@ -45,6 +71,7 @@ class Form extends Kohana_Form {
 		return Form::hidden('is_posted', 'TRUE');
 	}
 	
+	/* Form Field Extensions */
 	public static function open($action = NULL, array $attributes = NULL)
 	{
 		$return = parent::open($action, $attributes);
@@ -165,5 +192,24 @@ class Form extends Kohana_Form {
 			$name,
 			'checkbox'
 		);
+	}
+	
+	/* Helper Functions */
+	protected static function wrap($string, $name, $class)
+	{
+		return '<div class="'.$name.' '.$class.' wrap">'.$string.'</div>';
+	}
+	
+	protected static function intercept($attributes, $key)
+	{
+		if (isset($attributes[$key]))
+		{
+			$return = $attributes[$key];
+			unset($attributes[$key]);
+			return $return;
+		}
+		else{
+			return false;
+		}
 	}
 }

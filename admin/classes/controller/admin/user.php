@@ -21,20 +21,12 @@ class Controller_Admin_User extends Controller_Admin {
 		$message_type = $this->request->param('var');
 		$message = $this->request->param('subvar');
 		
-		if($message_type === 'success')
+		if($message_type === 'success' || $message_type === 'error')
 		{
 			if($message)
 			{
-				$success = array(Kohana::message('admin/user', $message));
-				View::set_global('success', $success);
-			}
-		}
-		elseif($message_type === 'error')
-		{
-			if($message)
-			{
-				$errors = array(Kohana::message('admin/user', $message));
-				View::set_global('errors', $errors);
+				Form::$message_type('admin/user', $message);
+				View::set_global($message_type, Form::show($message_type));
 			}
 		}
 
