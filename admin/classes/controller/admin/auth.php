@@ -3,20 +3,25 @@
 class Controller_Admin_Auth extends Controller {
 	public function action_login()
 	{
+		// Post
 		if($post = Form::post())
 		{
+			// Attempt Login
 			$success = Auth::instance()->login($post['username'], $post['password'], isset($post['remember_me']));
 
 			if ($success)
 			{
-			  $this->request->redirect('admin');
+				// Success
+				$this->request->redirect('admin');
 			}
-			else{
-				$errors = array(Kohana::message('admin/auth', 'bad_login'));
-				View::bind_global('errors', $errors);
+			else
+			{
+				// Failure
+				Form::error('admin/auth', 'bad_login');
 			}
 		}
 
+		// View
 		$this->template = View::factory('admin/auth/login');
 		$this->template->title = 'Login';
 		$this->response->body($this->template->render());
@@ -30,15 +35,15 @@ class Controller_Admin_Auth extends Controller {
 	
 	public function action_forgotpassword()
 	{
-		if($post = Form::post())
+		// Post
+		if ($post = Form::post())
 		{
-			$email = $post['email'];
-			
+			// Get user
 			$user = ORM::factory('user')
-				->where('email', '=', $email)
+				->where('email', '=', $post['email'])
 				->find();
 
-			if($user->loaded())
+			if ($user->loaded())
 			{
 				//Mail
 				$subject = 'Password request for '.$user->username;
@@ -48,15 +53,17 @@ class Controller_Admin_Auth extends Controller {
 			
 				Email::send($to, $from, $subject, $message, $html = true);
 				
-				$success = array(Kohana::message('admin/auth', 'password_email_sent'));
-				View::bind_global('success', $success);
+				// Success
+				Form::success('admin/auth', 'password_email_sent');
 			}
-			else{
-				$errors = array(Kohana::message('admin/auth', 'no_such_email'));
-				View::bind_global('errors', $errors);
+			else
+			{
+				// Email does not belong to any user
+				Form::error('admin/auth', 'no_such_email');
 			}
 		}
 		
+		// View
 		$this->template = View::factory('admin/auth/forgotpassword');
 		$this->template->title = 'Forgot Password';
 		$this->response->body($this->template->render());
