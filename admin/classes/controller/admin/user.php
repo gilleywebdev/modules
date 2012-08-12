@@ -18,7 +18,7 @@ class Controller_Admin_User extends Controller_Admin {
 				$user->password = $post['password1'];
 				$user->save();
 				
-				$success = array(Kohana::message('success', 'password_changed'));
+				$success = array(Kohana::message('admin/user', 'password_changed'));
 				View::bind_global('success', $success);
 			}
 			else{
@@ -55,7 +55,7 @@ class Controller_Admin_User extends Controller_Admin {
 		{
 			if($message)
 			{
-				$success = array(Kohana::message('admin/user/success', $message));
+				$success = array(Kohana::message('admin/user', $message));
 				View::set_global('success', $success);
 			}
 		}
@@ -63,7 +63,7 @@ class Controller_Admin_User extends Controller_Admin {
 		{
 			if($message)
 			{
-				$errors = array(Kohana::message('admin/user/error', $message));
+				$errors = array(Kohana::message('admin/user', $message));
 				View::set_global('errors', $errors);
 			}
 		}

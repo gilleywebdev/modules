@@ -22,7 +22,7 @@ class Controller_Admin_Info extends Controller_Admin {
 
 				Kohana::$config->copy('info');
 				
-				$success = array(Kohana::message('success', 'info_updated'));
+				$success = array(Kohana::message('admin/info', 'info_updated'));
 				View::bind_global('success', $success);
 			}
 			else{

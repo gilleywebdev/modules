@@ -36,7 +36,7 @@ class Controller_Admin_Auth extends Controller_Template {
 				->where('email', '=', $email)
 				->find();
 
-			if($user)
+			if($user->loaded())
 			{
 				//Mail
 				$subject = 'Password request for '.$user->username;
@@ -48,6 +48,10 @@ class Controller_Admin_Auth extends Controller_Template {
 				
 				$success = array(Kohana::message('admin/auth', 'password_email_sent'));
 				View::bind_global('success', $success);
+			}
+			else{
+				$errors = array(Kohana::message('admin/auth', 'no_such_email'));
+				View::bind_global('errors', $errors);
 			}
 		}
 		
