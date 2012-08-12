@@ -26,6 +26,31 @@ class Controller_Admin_Auth extends Controller_Template {
 	
 	public function action_forgotpassword()
 	{
+		if(Form::is_posted())
+		{
+			$post = $this->request->post();
+
+			$email = $post['email'];
+			
+			$user = ORM::factory('user')
+				->where('email', '=', $email)
+				->find();
+
+			if($user)
+			{
+				//Mail
+				$subject = 'Password request for '.$user->username;
+				$from = 'info@'.$_SERVER['SERVER_NAME'];
+				$to = $user->email;
+				$message = View::factory('admin/emails/forgotpassword');
+			
+				Email::send($to, $from, $subject, $message, $html = true);
+				
+				$success = array(Kohana::message('admin/auth', 'password_email_sent'));
+				View::bind_global('success', $success);
+			}
+		}
+		
 		$this->template = View::factory('admin/auth/forgotpassword');
 		$this->template->title = 'Forgot Password';
 	}
