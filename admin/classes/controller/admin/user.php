@@ -50,8 +50,7 @@ class Controller_Admin_User extends Controller_Admin {
 	{
 		if($post = Form::post())
 		{
-			$post = Validation::factory($post)
-				->rule('username', 'not_empty')
+			$post->rule('username', 'not_empty')
 				->rule('email', 'not_empty')
 				->rule('email', 'email');
 

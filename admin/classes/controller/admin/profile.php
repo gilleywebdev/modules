@@ -7,8 +7,7 @@ class Controller_Admin_Profile extends Controller_Admin {
 
 		if($post = Form::post())
 		{
-			$post = Validation::factory($post)
-			    ->rule('password2', 'matches', array(':validation', ':field', 'password1'));
+			$post->rule('password2', 'matches', array(':validation', ':field', 'password1'));
 
 			if($post->check())
 			{

@@ -9,10 +9,8 @@ class Controller_Admin_Info extends Controller_Admin {
 
 		$config = Kohana::$config->load('info/values');
 
-		if(Form::is_posted())
+		if($post = Form::post())
 		{
-			$post = Validation::factory($this->request->post());
-
 			if($post->check())
 			{				
 				foreach($labels AS $key => $val)
