@@ -20,17 +20,11 @@ class Controller_Admin extends Controller_Template {
 	
 	public function after()
 	{
+		// Load modules from config
 		View::set_global('modules',Kohana::$config->load('admin/modules'));
-		
-		if( class_exists('Info'))
-		{
-			$this->template->set('header', Info::get('name'));
-		}
-		else{
-			$admin_config = Kohana::$config->load('admin');
-			$this->template->set('header', $admin_config['header']);
-		}
-		
+
+		$this->template->set('header', Info::get('name'));
+
 		parent::after();
 	}
 }
