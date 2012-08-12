@@ -48,9 +48,9 @@ class Controller_Admin_User extends Controller_Admin {
 	
 	public function action_add()
 	{
-		if(Form::is_posted())
+		if($post = Form::post())
 		{
-			$post = Validation::factory($this->request->post())
+			$post = Validation::factory($post)
 				->rule('username', 'not_empty')
 				->rule('email', 'not_empty')
 				->rule('email', 'email');
@@ -81,7 +81,7 @@ class Controller_Admin_User extends Controller_Admin {
 	public function action_delete()
 	{
 		$user = ORM::factory('user', $this->request->param('var'));
-		if($this->user->id === $user->id)
+		if($this->me->id === $user->id)
 		{
 			$this->request->redirect('/admin/user/index/error/deleteself');
 		}
@@ -91,10 +91,8 @@ class Controller_Admin_User extends Controller_Admin {
 		}
 		else
 		{
-			if(Form::is_posted())
+			if($post = Form::post())
 			{
-				$post = $this->request->post();
-
 				if($post['response'] === 'yes')
 				{
 					$id = $this->request->param('var');

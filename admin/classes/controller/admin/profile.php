@@ -3,11 +3,11 @@
 class Controller_Admin_Profile extends Controller_Admin {
 	public function action_index()
 	{
-		$id = $this->user->id;
+		$id = $this->me->id;
 
-		if(Form::is_posted())
+		if($post = Form::post())
 		{
-			$post = Validation::factory($this->request->post())
+			$post = Validation::factory($post)
 			    ->rule('password2', 'matches', array(':validation', ':field', 'password1'));
 
 			if($post->check())

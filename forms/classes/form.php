@@ -19,15 +19,16 @@ class Form extends Kohana_Form {
 		}
 	}
 
-	public static function is_posted()
+	public static function post()
 	{
-		if (isset($_POST))
+		$post = Request::current()->post();
+		if (isset($post))
 		{
-			if (isset($_POST['is_posted']))
+			if (isset($post['is_posted']))
 			{
-				if ($_POST['is_posted'] === 'TRUE')
+				if ($post['is_posted'] === 'TRUE')
 				{
-					return true;
+					return $post;
 				}
 				else{
 					return false;

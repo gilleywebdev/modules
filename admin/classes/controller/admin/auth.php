@@ -3,9 +3,8 @@
 class Controller_Admin_Auth extends Controller {
 	public function action_login()
 	{
-		if(Form::is_posted())
+		if($post = Form::post())
 		{
-			$post = $this->request->post();
 			$success = Auth::instance()->login($post['username'], $post['password'], isset($post['remember_me']));
 
 			if ($success)
@@ -31,10 +30,8 @@ class Controller_Admin_Auth extends Controller {
 	
 	public function action_forgotpassword()
 	{
-		if(Form::is_posted())
+		if($post = Form::post())
 		{
-			$post = $this->request->post();
-
 			$email = $post['email'];
 			
 			$user = ORM::factory('user')
