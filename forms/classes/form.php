@@ -1,46 +1,33 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Form extends Kohana_Form {	
-	protected static $_success;
-	
-	protected static $_errors = array();
+	protected static $_messages = array();
 
 	public static function success($file, $path = NULL, $default = NULL)
 	{
-		if( $message = Kohana::message($file, $path, $default))
-		{
-			Form::$_success = $message;
-			return true;
-		}
-		else{
-			return false;
-		}
+		return Form::_add_message($file, $path, $default, 'success');
 	}
-	
+
 	public static function error($file, $path = NULL, $default = NULL)
 	{
+		return Form::_add_message($file, $path, $default, 'error');
+	}
+
+	protected static function _add_message($file, $path, $default, $type)
+	{
 		if( $message = Kohana::message($file, $path, $default))
 		{
-			Form::$_errors[] = $message;
+			Form::$_messages[$type][] = $message;
+
+			if( ! View::get_global($type))
+			{
+				View::bind_global('form_result', Form::$_messages);
+			}
+			
 			return true;
 		}
 		else{
 			return false;
-		}
-	}
-	
-	public static function show($type = 'error')
-	{
-		if($type == 'error')
-		{
-			return Form::$_errors;
-		}
-		elseif($type = 'success')
-		{
-			return Form::$_success;
-		}
-		else{
-			throw new Kohana_Exception('type must be success or error');
 		}
 	}
 

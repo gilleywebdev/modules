@@ -21,12 +21,11 @@ class Controller_Admin_User extends Controller_Admin {
 		$message_type = $this->request->param('var');
 		$message = $this->request->param('subvar');
 		
-		if($message_type === 'success' || $message_type === 'error')
+		if($message_type === 'success' or $message_type === 'error')
 		{
 			if($message)
 			{
 				Form::$message_type('admin/user', $message);
-				View::set_global($message_type, Form::show($message_type));
 			}
 		}
 

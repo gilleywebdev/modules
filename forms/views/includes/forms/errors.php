@@ -1,7 +1,8 @@
-<?php if(isset($error) && $error): ?>
-	<div class="result errors">
+<?php if(isset($form_result)): ?>
+	<?php foreach($form_result AS $type => $messages): ?>
+	<div class="result <?php echo $type ?>">
 		<ul>
-	<?php foreach($error AS $message): 
+	<?php foreach($messages AS $message): 
 			if(is_array($message)): 
 				foreach($message AS $inner): ?>
 					<li><?php echo $inner ?></li>
@@ -12,10 +13,5 @@
 	<?php endforeach; ?>
 		</ul>
 	</div>
-<?php elseif(isset($success)): ?>
-	<div class="result success">
-		<ul>
-		<li><?php echo $success; ?></li>
-		</ul>
-	</div>
+	<?php endforeach; ?>
 <?php endif; ?>
