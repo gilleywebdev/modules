@@ -108,33 +108,6 @@ class Controller_Admin_User extends Controller_Admin {
 		$this->template->title = 'Add User';
 	}
 	
-	public function action_edit()
-	{
-		$user = ORM::factory('user', $this->request->param('var'));
-
-		if(Form::is_posted())
-		{
-			$post = Validation::factory($this->request->post())
-				->rule('email', 'not_empty');
-
-			if($post->check())
-			{
-				$user->email = $post['email'];
-
-				$user->save();
-
-				$this->request->redirect('/admin/user/index/success/edited');
-			}
-			else{
-				$errors = $post->errors('contact');
-				View::bind_global('errors', $errors);
-			}
-		}
-		
-		$this->template->content = View::factory('admin/user/edit')->bind('user', $user);
-		$this->template->title = 'Edit User';
-	}
-	
 	public function action_delete()
 	{
 		$user = ORM::factory('user', $this->request->param('var'));
