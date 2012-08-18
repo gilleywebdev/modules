@@ -40,8 +40,9 @@ class Controller_Admin_User extends Controller_Admin {
 				// Success
 				$this->request->redirect('/admin/user/index/success/added');
 			}
-			catch(ORM_Validation_Exception $e)
+			catch( ORM_Validation_Exception $e)
 			{
+				// Errors
 				Form::errors($e->errors('admin/user'));
 			}
 		}
