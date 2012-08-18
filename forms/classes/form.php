@@ -3,6 +3,7 @@
 class Form extends Kohana_Form {	
 	protected static $_messages = array();
 
+	/* Messaging */
 	public static function success($file, $path = NULL, $default = NULL)
 	{
 		return Form::_add_message($file, $path, $default, 'success');
@@ -11,6 +12,20 @@ class Form extends Kohana_Form {
 	public static function error($file, $path = NULL, $default = NULL)
 	{
 		return Form::_add_message($file, $path, $default, 'error');
+	}
+	
+	public static function errors(array $errors)
+	{
+		$type = 'error';
+		foreach($errors AS $message)
+		{
+			Form::$_messages[$type][] = $message;
+		}
+		
+		if( ! View::get_global($type))
+		{
+			View::bind_global('form_result', Form::$_messages);
+		}
 	}
 
 	protected static function _add_message($file, $path, $default, $type)

@@ -26,7 +26,7 @@ class Controller_Admin_User extends Controller_Admin {
 		// Post
 		if($post = Form::post())
 		{
-			if($post->check())
+			try
 			{
 				// Create the user
 				$user = ORM::factory('user')->create($post, array(
@@ -35,10 +35,14 @@ class Controller_Admin_User extends Controller_Admin {
 				));
 
 				// Give the user login privilege
-				$user->add('roles', ORM::factory('role', array('name' => 'login'));
+				$user->add('roles', ORM::factory('role', array('name' => 'login')));
 
 				// Success
 				$this->request->redirect('/admin/user/index/success/added');
+			}
+			catch(ORM_Validation_Exception $e)
+			{
+				Form::errors($e->errors('admin/user'));
 			}
 		}
 		

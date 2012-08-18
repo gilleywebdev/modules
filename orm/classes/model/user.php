@@ -6,6 +6,22 @@ class Model_User extends ORM {
 		'roles'       => array('model' => 'role', 'through' => 'roles_users'),
 	);
 
+	public function rules()
+	{
+		return array(
+			'username' => array(
+				array('not_empty'),
+				array('max_length', array(':value', 32)),
+				array(array($this, 'unique'), array('username', ':value')),
+			),
+			'email' => array(
+				array('not_empty'),
+				array('email'),
+				array(array($this, 'unique'), array('email', ':value')),
+			),
+		);
+	}
+
 	public function unique_key($value)
 	{
 		return Valid::email($value) ? 'email' : 'username';
