@@ -23,28 +23,22 @@ class Controller_Admin_User extends Controller_Admin {
 	
 	public function action_add()
 	{
+		// Post
 		if($post = Form::post())
 		{
-			$post->rule('username', 'not_empty')
-				->rule('email', 'not_empty')
-				->rule('email', 'email');
-
 			if($post->check())
 			{
-				$user = ORM::factory('user');
-				$user->username = $post['username'];
-				$user->email = $post['email'];
-				$user->password = $post['password'];
+				// Create the user
+				$user = ORM::factory('user')->create($post, array(
+					'username',
+					'email',
+				));
 
-				$user->save();
+				// Give the user login privilege
+				$user->add('roles', ORM::factory('role', array('name' => 'login'));
 
-				$user->add('roles', ORM::factory('role', array('name' => 'login')));
-
+				// Success
 				$this->request->redirect('/admin/user/index/success/added');
-			}
-			else{
-				$errors = $post->errors('contact');
-				View::bind_global('errors', $errors);
 			}
 		}
 		
