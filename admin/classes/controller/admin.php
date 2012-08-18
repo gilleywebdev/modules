@@ -8,8 +8,8 @@ class Controller_Admin extends Controller_Template {
 		parent::before();
 		
 		// User must be logged in to access admin page
-		$this->me = Auth::instance()->get_user();
-		if ( ! is_object($this->me))
+		$this->user = Auth::instance()->get_user();
+		if ( ! is_object($this->user))
 		{
 			// Send to login screen if not
 			$this->request->redirect('admin/auth/login');
@@ -17,7 +17,7 @@ class Controller_Admin extends Controller_Template {
 		else
 		{
 			// Bind variable for "Hi Chris", profile, etc.
-			View::bind_global('me', $this->me);
+			View::bind_global('me', $this->user);
 		}
 	}
 	

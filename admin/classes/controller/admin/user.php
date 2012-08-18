@@ -58,7 +58,7 @@ class Controller_Admin_User extends Controller_Admin {
 		$user = ORM::factory('user', $this->request->param('var'));
 
 		// Can't delete self
-		if($this->me->id === $user->id)
+		if($this->user->id === $user->id)
 		{
 			$this->request->redirect('/admin/user/index/error/deleteself');
 		}

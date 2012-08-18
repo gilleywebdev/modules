@@ -7,7 +7,7 @@ class Controller_Admin_Auth extends Controller {
 		if($post = Form::post())
 		{
 			// Attempt Login
-			$success = Auth::instance()->login($post['username'], $post['password'], isset($post['remember_me']));
+			$success = Auth::instance()->login($post['username'], $post['password'], isset($post['remember_me']));			
 
 			if ($success)
 			{
@@ -68,4 +68,35 @@ class Controller_Admin_Auth extends Controller {
 		$this->template->title = 'Forgot Password';
 		$this->response->body($this->template->render());
 	}
+	
+		public function action_reset()
+		{
+			// Post
+			if($post = Form::post())
+			{
+				// Rules
+				$post->rule('password2', 'matches', array(':validation', ':field', 'password1'));
+
+				if($post->check())
+				{
+					// Save profile
+					$user = ORM::factory('user', $this->user->id);
+					$user->password = $post['password1'];
+					$user->save();
+
+					// Success
+					Form::success('admin/profile', 'profile_updated');
+				}
+				else{
+					// Failure
+					$errors = $post->errors('contact');
+					View::bind_global('errors', $errors);
+				}
+			}
+
+			// View
+			$this->template = View::factory('admin/auth/login');
+			$this->template->title = 'Set New Password';
+			$this->template->content = View::factory('admin/auth/reset');
+		}
 }
