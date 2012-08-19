@@ -8,7 +8,7 @@ class Controller_Admin extends Controller_Template {
 		parent::before();
 		
 		// User must be logged in to access admin page
-		$this->user = Auth::instance()->get_user();
+		$this->user = Auth::instance()->get_user() OR Auth::instance()->auto_login();
 		if ( ! is_object($this->user))
 		{
 			// Send to login screen if not
