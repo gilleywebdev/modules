@@ -24,7 +24,7 @@ class ORM extends Kohana_ORM {
 		}
 	}
 	
-	private parent_create(Validation $validation = NULL)
+	private function parent_create(Validation $validation = NULL)
 	{
 		return parent::create($validation);
 	}
