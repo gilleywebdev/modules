@@ -89,14 +89,13 @@ class Controller_Admin_Auth extends Controller {
 				}
 				else{
 					// Failure
-					$errors = $post->errors('contact');
-					View::bind_global('errors', $errors);
+					Form::errors($post->errors('contact'));
 				}
 			}
 
 			// View
-			$this->template = View::factory('admin/auth/login');
+			$this->template = View::factory('admin/auth/reset');
 			$this->template->title = 'Set New Password';
-			$this->template->content = View::factory('admin/auth/reset');
+			$this->response->body($this->template->render());
 		}
 }
