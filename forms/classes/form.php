@@ -4,6 +4,17 @@ class Form extends Kohana_Form {
 	protected static $_messages = array();
 
 	/* Messaging */
+	public static function messaging_center($module, $message_type, $message)
+	{
+		$message_type = Request::current()->param($message_type);
+		$message = Request::current()->param($message);
+		
+		if($message and ($message_type === 'success' or $message_type === 'error'))
+		{
+			Form::$message_type($module, $message);
+		}
+	}
+	
 	public static function success($file, $path = NULL, $default = NULL)
 	{
 		return Form::_add_message($file, $path, $default, 'success');

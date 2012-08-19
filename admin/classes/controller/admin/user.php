@@ -7,13 +7,7 @@ class Controller_Admin_User extends Controller_Admin {
 		$users = ORM::factory('user')->find_all()->as_array();
 
 		// Messaging Center
-		$message_type = $this->request->param('var');
-		$message = $this->request->param('subvar');
-		
-		if($message and ($message_type === 'success' or $message_type === 'error'))
-		{
-			Form::$message_type('admin/user', $message);
-		}
+		Form::messaging_center('admin/user', 'var', 'subvar');
 
 		// View
 		$this->template->title = 'Users';
@@ -33,6 +27,24 @@ class Controller_Admin_User extends Controller_Admin {
 					'username',
 					'email',
 				));
+				
+				// Generate random password
+				$password = 'X2oWicyo';
+				//$password = Text::random();
+
+				// Send e-mail
+				$subject = 'Your username and password';
+				$from = 'info@'.$_SERVER['SERVER_NAME'];
+				$to = $user->email;
+				$message = View::factory('admin/emails/newuser')
+					->set('username', $user->username)
+					->set('password', $password);
+			
+				Email::send($to, $from, $subject, $message, $html = true);
+
+				// Save
+				$user->password = Auth::instance()->hash($password);
+				$user->save();
 
 				// Give the user login privilege
 				$user->add('roles', ORM::factory('role', array('name' => 'login')));

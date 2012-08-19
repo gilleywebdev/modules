@@ -45,11 +45,25 @@ class Controller_Admin_Auth extends Controller {
 
 			if ($user->loaded())
 			{
+				// Reset Data
+				$data = array(
+					'user_id'    => $user->id,
+					'expires'    => time() + (60 * 60 * 48), // 48 hours
+				);
+
+				// Create a new reset token
+				$token = ORM::factory('user_reset')
+							->values($data)
+							->create();
+							
+				$link = 'http://'.$_SERVER['SERVER_NAME'].'/admin/auth/reset/'.$token->token;
+
 				//Mail
 				$subject = 'Password request for '.$user->username;
 				$from = 'info@'.$_SERVER['SERVER_NAME'];
 				$to = $user->email;
-				$message = View::factory('admin/emails/forgotpassword');
+				$message = View::factory('admin/emails/forgotpassword')
+					->set('link', $link);
 			
 				Email::send($to, $from, $subject, $message, $html = true);
 				
@@ -71,31 +85,55 @@ class Controller_Admin_Auth extends Controller {
 	
 		public function action_reset()
 		{
-			// Post
-			if($post = Form::post())
+			// Get the user
+			$token = $this->request->param('var');
+			$reset = ORM::factory('user_reset', array('token' => $this->request->param('var')));
+			$user = ORM::factory('user', $reset->user_id);
+
+			if($user->loaded())
 			{
-				// Rules
-				$post->rule('password', 'matches', array(':validation', ':field', 'password_confirm'));
-
-				if($post->check())
+				// Post
+				if($post = Form::post())
 				{
-					// Save profile
-					$user = ORM::factory('user', $id);
-					$user->password = $post['password'];
-					$user->save();
+					// Rules
+					$post->rule('password', 'matches', array(':validation', ':field', 'password_confirm'));
 
-					// Success
-					Form::success('admin', 'profile_updated');
+					if($post->check())
+					{
+						// Save profile
+						$user->password = Auth::instance()->hash($post['password']);
+						$user->save();
+
+						// Delete the reset codes for this user
+						$user_resets = ORM::factory('user_reset')
+							->where('user_id', '=', $user->id)
+							->find_all();
+
+						foreach($user_resets AS $row)
+						{
+							$row->delete();
+						}
+
+						// Success
+						Auth::instance()->force_login($user);
+						$this->request->redirect('admin/dashboard/index/success/password_reset');
+					}
+					else{
+						// Failure
+						Form::errors($post->errors('contact'));
+					}
 				}
-				else{
-					// Failure
-					Form::errors($post->errors('contact'));
-				}
+
+				// View
+				$this->template = View::factory('admin/auth/reset')
+					->set('me', $user);
+				$this->template->title = 'Set New Password';
+				$this->response->body($this->template->render());				
 			}
-
-			// View
-			$this->template = View::factory('admin/auth/reset');
-			$this->template->title = 'Set New Password';
-			$this->response->body($this->template->render());
+			else
+			{
+				echo '<p>This reset code has expired</p>';
+				echo '<p><a href="/admin">Get a new one</a></p>';
+			}
 		}
 }
