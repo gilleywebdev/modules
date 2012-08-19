@@ -75,17 +75,17 @@ class Controller_Admin_Auth extends Controller {
 			if($post = Form::post())
 			{
 				// Rules
-				$post->rule('password2', 'matches', array(':validation', ':field', 'password1'));
+				$post->rule('password', 'matches', array(':validation', ':field', 'password_confirm'));
 
 				if($post->check())
 				{
 					// Save profile
-					$user = ORM::factory('user', $this->user->id);
-					$user->password = $post['password1'];
+					$user = ORM::factory('user', $id);
+					$user->password = $post['password'];
 					$user->save();
 
 					// Success
-					Form::success('admin/profile', 'profile_updated');
+					Form::success('admin', 'profile_updated');
 				}
 				else{
 					// Failure
