@@ -119,11 +119,14 @@ h2 {
 .seo:before {
   background-position: -426px -66px; }
 
-.users:before {
+.user:before {
   background-position: -246px -138px; }
 
 .info:before {
   background-position: -462px -426px; }
+
+.roles:before {
+  background-position: 6px -498px; }
 
 .inner_content {
   padding: 10px 20px; }

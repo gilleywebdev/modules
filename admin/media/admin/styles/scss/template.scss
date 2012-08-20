@@ -147,9 +147,11 @@ h2{
 
 @include icon('.seo', 12, 2);
 
-@include icon('.users', 7, 4);
+@include icon('.user', 7, 4);
 
 @include icon('.info', 13, 12);
+
+@include icon('.roles', 0, 14);
 
 .inner_content{
 	padding:10px 20px;
