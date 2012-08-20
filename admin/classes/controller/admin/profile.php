@@ -6,22 +6,34 @@ class Controller_Admin_Profile extends Controller_Admin {
 		// Post
 		if($post = Form::post())
 		{
-			// Rules
-			$post->rule('password2', 'matches', array(':validation', ':field', 'password1'));
-
-			if($post->check())
+			try
 			{
-				// Save profile
-				$user = ORM::factory('user', $this->user->id);
-				$user->password = $post['password1'];
-				$user->save();
+				// Update these fields
+				$update = array('username', 'email');
 				
+				// and password if it's set
+				if($post['password'] !== '')
+				{
+					$update[] = 'password';
+					
+					// Add Password Validation
+					$post->add_password_validation();
+				}
+				
+				// Save profile
+				$user = ORM::factory('user', $this->user->id)
+					->update($post, $update);
+				
+				// Refresh user data
+				$this->user = $user;
+
 				// Success
 				Form::success('admin/profile', 'profile_updated');
 			}
-			else{
-				// Failure
-				Form::errors($post->errors('contact'));
+			catch( ORM_Validation_Exception $e)
+			{
+				// Errors
+				Form::errors($e->errors('contact'));
 			}
 		}
 		

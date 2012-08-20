@@ -23,6 +23,15 @@ class Model_User extends ORM {
 		);
 	}
 
+	public function filters()
+	{
+		return array(
+			'password' => array(
+				array(array(Auth::instance(), 'hash'))
+			)
+		);
+	}
+
 	public function unique_key($value)
 	{
 		return Valid::email($value) ? 'email' : 'username';

@@ -27,7 +27,7 @@ class Controller_Admin_User extends Controller_Admin {
 					'username',
 					'email',
 				));
-				
+
 				// Generate random password
 				$password = Text::random();
 
@@ -42,7 +42,7 @@ class Controller_Admin_User extends Controller_Admin {
 				Email::send($to, $from, $subject, $message, $html = true);
 
 				// Save
-				$user->password = Auth::instance()->hash($password);
+				$user->password = $password;
 				$user->save();
 
 				// Give the user login privilege

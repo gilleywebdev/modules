@@ -92,7 +92,7 @@ class Controller_Admin_Auth extends Controller_Template {
 	{
 		// Get the user
 		$token = $this->request->param('var');
-		$reset = ORM::factory('user_reset', array('token' => $this->request->param('var')));
+		$reset = ORM::factory('user_reset', array('token' => $token));
 		$user = ORM::factory('user', $reset->user_id);
 
 		if($user->loaded())
@@ -101,12 +101,12 @@ class Controller_Admin_Auth extends Controller_Template {
 			if($post = Form::post())
 			{
 				// Rules
-				$post->rule('password', 'matches', array(':validation', ':field', 'password_confirm'));
+				$post->add_password_validation();
 
 				if($post->check())
 				{
 					// Save profile
-					$user->password = Auth::instance()->hash($post['password']);
+					$user->password = $post['password'];
 					$user->save();
 
 					// Delete the reset codes for this user
@@ -136,6 +136,7 @@ class Controller_Admin_Auth extends Controller_Template {
 		}
 		else
 		{
+			// User didn't load, token is out of date
 			$this->request->redirect('admin/auth/forgotpassword/error/reset_expired');
 		}
 	}
