@@ -1,8 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Admin_Info extends Controller_Admin {
-	public $template = 'admin/template/main';
-	
+
 	public function action_index()
 	{
 		// Load info configs
@@ -10,7 +9,7 @@ class Controller_Admin_Info extends Controller_Admin {
 		$config = Kohana::$config->load('info/values');
 
 		// Post
-		if($post = Form::post())
+		if ($post = Form::post())
 		{
 			// Save new info to database
 			foreach($labels AS $key => $val)

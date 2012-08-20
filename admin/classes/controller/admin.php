@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Admin extends Controller_Template {
-	public $template = 'admin/template/main';
+	public $template = 'admin/template/inside';
 	
 	public function before()
 	{
@@ -24,7 +24,7 @@ class Controller_Admin extends Controller_Template {
 	public function after()
 	{
 		// Load modules from config
-		View::set_global('modules',Kohana::$config->load('admin/modules'));
+		View::set_global('modules', Kohana::$config->load('admin/modules'));
 
 		// Header from info config
 		$this->template->set('header', Info::get('name'));

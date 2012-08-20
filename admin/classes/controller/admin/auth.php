@@ -1,6 +1,8 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Admin_Auth extends Controller {
+class Controller_Admin_Auth extends Controller_Template {
+	public $template = 'admin/template/outside';
+
 	public function action_login()
 	{
 		// Post
@@ -22,9 +24,10 @@ class Controller_Admin_Auth extends Controller {
 		}
 
 		// View
-		$this->template = View::factory('admin/auth/login');
+		Styles::add(array('admin', 'login'), Styles::PAGE);
+		Scripts::add(array('admin', 'login'), Scripts::CONTROLLER);
+		$this->template->content = View::factory('admin/auth/login');
 		$this->template->title = 'Login';
-		$this->response->body($this->template->render());
 	}
 
 	public function action_logout()
@@ -77,63 +80,63 @@ class Controller_Admin_Auth extends Controller {
 			}
 		}
 		
+		// Messaging Center
+		Form::messaging_center('admin/auth', 'var', 'subvar');
+		
 		// View
-		$this->template = View::factory('admin/auth/forgotpassword');
+		$this->template->content = View::factory('admin/auth/forgotpassword');
 		$this->template->title = 'Forgot Password';
-		$this->response->body($this->template->render());
 	}
 	
-		public function action_reset()
+	public function action_reset()
+	{
+		// Get the user
+		$token = $this->request->param('var');
+		$reset = ORM::factory('user_reset', array('token' => $this->request->param('var')));
+		$user = ORM::factory('user', $reset->user_id);
+
+		if($user->loaded())
 		{
-			// Get the user
-			$token = $this->request->param('var');
-			$reset = ORM::factory('user_reset', array('token' => $this->request->param('var')));
-			$user = ORM::factory('user', $reset->user_id);
-
-			if($user->loaded())
+			// Post
+			if($post = Form::post())
 			{
-				// Post
-				if($post = Form::post())
+				// Rules
+				$post->rule('password', 'matches', array(':validation', ':field', 'password_confirm'));
+
+				if($post->check())
 				{
-					// Rules
-					$post->rule('password', 'matches', array(':validation', ':field', 'password_confirm'));
+					// Save profile
+					$user->password = Auth::instance()->hash($post['password']);
+					$user->save();
 
-					if($post->check())
+					// Delete the reset codes for this user
+					$user_resets = ORM::factory('user_reset')
+						->where('user_id', '=', $user->id)
+						->find_all();
+
+					foreach($user_resets AS $row)
 					{
-						// Save profile
-						$user->password = Auth::instance()->hash($post['password']);
-						$user->save();
-
-						// Delete the reset codes for this user
-						$user_resets = ORM::factory('user_reset')
-							->where('user_id', '=', $user->id)
-							->find_all();
-
-						foreach($user_resets AS $row)
-						{
-							$row->delete();
-						}
-
-						// Success
-						Auth::instance()->force_login($user);
-						$this->request->redirect('admin/dashboard/index/success/password_reset');
+						$row->delete();
 					}
-					else{
-						// Failure
-						Form::errors($post->errors('contact'));
-					}
+
+					// Success
+					Auth::instance()->force_login($user);
+					$this->request->redirect('admin/dashboard/index/success/password_reset');
 				}
+				else{
+					// Failure
+					Form::errors($post->errors('contact'));
+				}
+			}
 
-				// View
-				$this->template = View::factory('admin/auth/reset')
-					->set('me', $user);
-				$this->template->title = 'Set New Password';
-				$this->response->body($this->template->render());				
-			}
-			else
-			{
-				echo '<p>This reset code has expired</p>';
-				echo '<p><a href="/admin">Get a new one</a></p>';
-			}
+			// View
+			$this->template->content = View::factory('admin/auth/reset')
+				->set('me', $user);
+			$this->template->title = 'Set New Password';
 		}
+		else
+		{
+			$this->request->redirect('admin/auth/forgotpassword/error/reset_expired');
+		}
+	}
 }

@@ -29,8 +29,7 @@ class Controller_Admin_User extends Controller_Admin {
 				));
 				
 				// Generate random password
-				$password = 'X2oWicyo';
-				//$password = Text::random();
+				$password = Text::random();
 
 				// Send e-mail
 				$subject = 'Your username and password';
