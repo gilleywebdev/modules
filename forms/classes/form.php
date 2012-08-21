@@ -67,6 +67,7 @@ class Form extends Kohana_Form {
 			{
 				if ($post['is_posted'] === 'TRUE')
 				{
+					unset($post['is_posted']);
 					return Validation::factory($post);
 				}
 				else{
