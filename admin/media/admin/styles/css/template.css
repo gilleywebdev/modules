@@ -35,7 +35,7 @@ body {
   width: 150px;
   padding: 10px 0;
   background-color: #ECECEC;
-  border-right: 1px solid #CCCCCC; }
+  border-right: 1px solid #c9c9c9; }
 
 .site_name {
   font-size: 16pt;
@@ -52,7 +52,7 @@ body {
 
 .header {
   width: 100%;
-  border-bottom: 1px solid #C9C9C9; }
+  border-bottom: 1px solid #c9c9c9; }
 
 h2 {
   color: #343434;
@@ -180,15 +180,30 @@ h2 {
 .submit:hover {
   background: #9C2F23; }
 
+/* Tables */
 table {
-  margin: 20px 0; }
+  border-bottom: 1px solid #c9c9c9;
+  margin: 15px 0; }
 
-table th {
-  font-weight: bold;
-  color: #343434;
+th {
   text-align: left;
-  padding-bottom: 3px;
-  border-bottom: 1px solid #3f3f3f; }
+  color: #293744;
+  border-bottom: 1px solid #c9c9c9;
+  padding: 0 6px 4px; }
+
+td {
+  vertical-align: middle;
+  white-space: nowrap;
+  padding: 2px 6px; }
+
+td.first {
+  border-left: 1px solid #c9c9c9; }
+
+td.last {
+  border-right: 1px solid #c9c9c9; }
+
+.edit, .delete {
+  text-align: center; }
 
 tbody tr:nth-child(odd) {
   background: #e3e3e3; }
@@ -196,37 +211,15 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background: #f7f7f7; }
 
-table td {
-  padding: 5px 50px 5px 0;
-  border-bottom: 1px solid #7b7b7b;
-  vertical-align: middle;
-  white-space: nowrap; }
-
-table .first {
-  padding-left: 10px; }
-
-table .last {
-  padding-right: 30px; }
-
-table .edit_header {
-  padding-right: 40px; }
-
-.edit, .delete {
-  text-align: center; }
-
-.delete {
-  padding-left: 8px; }
-
+/* End table styles */
 .button {
-  display: block;
+  display: inline-block;
   padding: 7px;
   color: #fff;
   background: #033E6B;
   text-decoration: none;
   font-weight: bold;
   border-radius: 10px;
-  float: left;
-  clear: both;
   box-shadow: 3px 4px 7px -2px #444444; }
 
 .button:hover {
