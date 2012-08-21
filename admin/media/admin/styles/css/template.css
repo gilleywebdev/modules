@@ -194,7 +194,8 @@ th {
 td {
   vertical-align: middle;
   white-space: nowrap;
-  padding: 2px 6px; }
+  padding: 2px 6px;
+  height: 27px; }
 
 td.first {
   border-left: 1px solid #c9c9c9; }

@@ -15,9 +15,9 @@
 	<tbody>
 	<?php foreach($pages AS $name => $tags): ?>
 		<tr>
-			<td><?php echo $name ?></td>
+			<td class="first"><?php echo $name ?></td>
 			<td><?php echo Form::input($name.'_title', $tags['title']) ?></td>
-			<td><?php echo Form::input($name.'_description', $tags['description']) ?></td>
+			<td class="last"><?php echo Form::input($name.'_description', $tags['description']) ?></td>
 		</tr>
 	<?php endforeach ?>
 	</tbody>
