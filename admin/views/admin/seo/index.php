@@ -13,11 +13,11 @@
 		</tr>
 	</thead>
 	<tbody>
-	<?php foreach($pages AS $page): ?>
+	<?php foreach($pages AS $name => $tags): ?>
 		<tr>
-			<td><?php echo $page ?></td>
-			<td><?php echo Form::input($page.'_title', 'title') ?></td>
-			<td><?php echo Form::input($page.'_description', 'description') ?></td>
+			<td><?php echo $name ?></td>
+			<td><?php echo Form::input($name.'_title', $tags['title']) ?></td>
+			<td><?php echo Form::input($name.'_description', $tags['description']) ?></td>
 		</tr>
 	<?php endforeach ?>
 	</tbody>

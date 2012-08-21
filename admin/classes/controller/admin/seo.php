@@ -36,13 +36,37 @@ class Controller_Admin_Seo extends Controller_Admin {
 			// Success
 			Form::success('admin/seo', 'seo_updated');
 		}
-		
-		// Get names for all the pages
-		$pages = Kohana::list_files('views/pages');
 
-		// Remove extension
-		foreach ($pages AS $key => $val){
-			$pages[$key] = basename($val, EXT);
+		$pages = array();
+
+		// Get names for all the pages
+		$files = Kohana::list_files('views/pages');
+
+		foreach ($files AS $filename)
+		{
+			$pagename = basename($filename, EXT);
+
+			// Look for page in database
+			$page = ORM::factory('page')
+				->where('pagename', '=', $pagename)
+			    ->find();
+			
+			if($page->loaded())
+			{
+				// DB entry, use data
+				$pages[$pagename] = array(
+					'title' => $page->title,
+					'description' => $page->description,
+				);
+			}
+			else
+			{
+				// No DB entry, placeholders
+				$pages[$pagename] = array(
+					'title' => '*** NEEDS TITLE ***',
+					'description' => '*** NEEDS DESCRIPTION ***',
+				);
+			}
 		}
 
 		// Messaging Center
