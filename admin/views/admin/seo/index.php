@@ -1,5 +1,3 @@
-<p>Hello SEO World!</p>
-
 <?php if ($pages): ?>
 	<?php echo View::factory('includes/forms/errors') ?>
 	<?php echo Form::open() ?>

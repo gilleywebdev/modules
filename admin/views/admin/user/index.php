@@ -1,6 +1,5 @@
 <?php echo View::factory('includes/forms/errors') ?>
 <p><a class="button" href="/admin/user/add">Add User</a></p>
-<div class="clear"></div>
 <table>
 	<thead>
 		<tr>
@@ -19,5 +18,4 @@
 	<?php endforeach; ?>
 	</tbody>
 </table>
-<div class="clear"></div>
 <p><a class="button" href="/admin/user/add">Add User</a></p>
