@@ -2,5 +2,4 @@
 
 return array(
 	'user' => 'Users',
-	'roles' => 'Roles',
 );
