@@ -14,8 +14,8 @@
 	<?php foreach($pages AS $name => $tags): ?>
 		<tr>
 			<td class="first"><?php echo $name ?></td>
-			<td><?php echo Form::input($name.'_title', $tags['title']) ?></td>
-			<td class="last"><?php echo Form::input($name.'_description', $tags['description']) ?></td>
+			<td><?php echo Form::text($name.'_title', $tags['title']) ?></td>
+			<td class="last"><?php echo Form::textarea($name.'_description', $tags['description']) ?></td>
 		</tr>
 	<?php endforeach ?>
 	</tbody>
