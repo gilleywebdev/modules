@@ -37,6 +37,19 @@ class Controller_Admin_Seo extends Controller_Admin {
 			Form::success('admin/seo', 'seo_updated');
 		}
 
+		// Messaging Center
+		Form::messaging_center('admin/seo', 'var', 'subvar');
+
+		// View
+		$this->template->title = 'SEO';
+		$this->template->content = View::factory('admin/seo/index');
+
+		Scripts::add(array('admin', 'seo'), Scripts::CONTROLLER);
+		Styles::add(array('admin', 'seo'), Styles::PAGE);
+	}
+	
+	public function action_load()
+	{
 		$pages = array();
 
 		// Get names for all the pages
@@ -54,30 +67,53 @@ class Controller_Admin_Seo extends Controller_Admin {
 			if($page->loaded())
 			{
 				// DB entry, use data
-				$pages[$pagename] = array(
-					'title' => $page->title,
-					'description' => $page->description,
+				$pages[] = array(
+					$pagename,
+					$page->title,
+					$page->description,
 				);
 			}
 			else
 			{
 				// No DB entry, placeholders
-				$pages[$pagename] = array(
-					'title' => '*** NEEDS TITLE ***',
-					'description' => '*** NEEDS DESCRIPTION ***',
+				$pages[] = array(
+					$pagename,
+					'*** NEEDS TITLE ***',
+					'*** NEEDS DESCRIPTION ***',
 				);
 			}
 		}
-
-		// Messaging Center
-		Form::messaging_center('admin/seo', 'var', 'subvar');
-
+		
+		// It has to be in this format for handontable to read it
+		$obj = new stdClass;
+		$obj->data = $pages;
+		
+		$data = json_encode($obj);
+		
 		// View
-		$this->template->title = 'SEO';
-		$this->template->content = View::factory('admin/seo/index')
-			->set('pages', $pages);
+		$this->template = View::factory('admin/seo/load')
+			->set('data', $data);
+	}
+	
+	public function action_save()
+	{
+		$post = $this->request->post();
+		$data = $post['data'];
 
-		Scripts::add(array('admin', 'seo'), Scripts::CONTROLLER);
-		Styles::add(array('admin', 'seo'), Styles::PAGE);
+		foreach($data AS $datum)
+		{
+			$page = ORM::factory('page')
+				->where('pagename', '=', $datum[0])
+			    ->find();
+			
+			if($page->loaded())
+			{
+				$page->title = $datum[1];
+				$page->description = $datum[2];
+				$page->save();
+			}
+		}
+	
+		$this->template = View::factory('admin/seo/save');
 	}
 }

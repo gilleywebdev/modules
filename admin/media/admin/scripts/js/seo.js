@@ -12,15 +12,30 @@ container.handsontable({
 			readOnly: true // make it read-only
 		}
 	],
-    rowHeaders: false, // Doesn't seem to work
+    rowHeaders: false,
     colHeaders: ["Page", "Title", "Description"]
 
 });
 
-var data = [
-	["index", "This is an Example of a Title Tag that is Seventy Characters in Length", "Here is an example of what a snippet looks like in Google's SERPs. The content that appears here is usually taken from the Meta Description tag if relevant."],
-	["contact", "", ""],
-	["thank-you", "", ""]
-];
+var handsontable = container.data('handsontable');
 
-container.handsontable("loadData", data);
+$.ajax({
+	url: "/admin/seo/load",
+	dataType: 'json',
+	type: 'GET',
+	success: function (res) {
+		handsontable.loadData(res.data);
+	}
+});
+
+$('.submit').click(function () {
+	$.ajax({
+		url: "/admin/seo/save",
+		data: {"data": handsontable.getData()}, // returns all cells' data
+		dataType: 'json',
+		type: 'POST',
+		success: function () {
+			window.location.href = "/admin/seo/index/success/seo_updated";
+		}
+	});
+});
