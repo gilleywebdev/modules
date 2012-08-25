@@ -18,7 +18,7 @@ container.handsontable({
 });
 
 var data = [
-	["index", "", ""],
+	["index", "This is an Example of a Title Tag that is Seventy Characters in Length", "Here is an example of what a snippet looks like in Google's SERPs. The content that appears here is usually taken from the Meta Description tag if relevant."],
 	["contact", "", ""],
 	["thank-you", "", ""]
 ];

@@ -2157,7 +2157,7 @@ var Handsontable = { //class namespace
             value = '';
         }
         if (!allowHtml) {
-          value = value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); //escape html special chars
+/*          value = value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); //escape html special chars */
         }
         td.innerHTML = value.replace(/\n/g, '<br/>');
         self.minWidthFix(td);
