@@ -29,6 +29,9 @@ class Controller_Admin extends Controller_Template {
 		// Header from info config
 		$this->template->set('header', Info::get('name'));
 
+		// Initialize plugins
+		Plugins::init('admin');
+
 		parent::after();
 	}
 }

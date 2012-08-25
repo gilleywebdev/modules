@@ -1,0 +1,168 @@
+/**
+ * It may be useful to copy the below styles and use on your page
+ */
+.spreadsheet {
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.3em;
+  font-size: 13px;
+}
+
+.spreadsheet table {
+  border-collapse: separate;
+  position: relative;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  border-spacing: 0;
+}
+
+.spreadsheet th,
+.spreadsheet td {
+  border-right: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
+  min-width: 50px;
+  height: 22px;
+  line-height: 16px;
+  padding: 0 4px 0 4px; /* top, bottom padding different than 0 is handled poorly by FF with HTML5 doctype */
+}
+
+.spreadsheet div.minWidthFix {
+  width: 50px;
+}
+
+.spreadsheet tr:first-child th.htNoFrame,
+.spreadsheet th:first-child.htNoFrame,
+.spreadsheet th.htNoFrame {
+  border-left-width: 0;
+  background-color: white;
+  border-color: #FFF;
+}
+
+.spreadsheet th:first-child,
+.spreadsheet td:first-child,
+.spreadsheet .htNoFrame + th,
+.spreadsheet .htNoFrame + td {
+  border-left: 1px solid #CCC;
+}
+
+.spreadsheet tr:first-child th,
+.spreadsheet tr:first-child td {
+  border-top: 1px solid #CCC;
+}
+
+.spreadsheet thead tr:last-child th {
+  border-bottom-width: 0;
+}
+
+.spreadsheet thead tr.lastChild th {
+  border-bottom-width: 0;
+}
+
+.spreadsheet th {
+  background-color: #EEE;
+  color: #222;
+  text-align: center;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+.spreadsheet th .small {
+  font-size: 12px;
+}
+
+.spreadsheet thead th {
+  padding: 2px 4px;
+}
+
+.spreadsheet th.active {
+  background-color: #CCC;
+}
+
+/* border background */
+.spreadsheet .htBorderBg {
+  position: absolute;
+  font-size: 0;
+}
+
+.spreadsheet .htBorderBg.selection {
+  background-color: #EEF4FF;
+}
+
+/* border line */
+.spreadsheet .htBorder {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #000;
+  font-size: 0;
+}
+
+.spreadsheet .htBorder.current {
+  background: #5292F7;
+  width: 2px;
+  height: 2px;
+}
+
+.spreadsheet .htBorder.selection {
+  background: #89AFF9;
+  width: 1px;
+  height: 1px;
+}
+
+/* fill handle */
+.spreadsheet .htFillHandle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #5292F7;
+  border: 1px solid #fff;
+  font-size: 0;
+  cursor: crosshair;
+}
+
+.spreadsheet .htBorder.htFillBorder {
+  background: red;
+  width: 1px;
+  height: 1px;
+}
+
+/* textarea border color */
+textarea.handsontableInput {
+  border: 2px solid #5292F7;
+  outline-width: 0;
+  margin: 0;
+  padding: 1px 4px 0 2px;
+  font-family: Arial, Helvetica, sans-serif; /*repeat from .spreadsheet (inherit doesn't work with IE<8) */
+  line-height: 1.3em;
+  font-size: 13px;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.4);
+  resize: none;
+}
+
+.handsontableInputHolder.htHidden textarea.handsontableInput {
+  border-color: #5292F7;
+  background: #5292F7;
+  color: #5292F7;
+}
+
+.handsontableInputHolder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Added by Gilley */
+
+.htRowHeader {
+	display: none;
+}
+
+.spreadsheet tbody td:nth-child(2), .spreadsheet tr.htColHeader th:nth-child(2) {
+	border-left: 1px solid #CCC;
+}

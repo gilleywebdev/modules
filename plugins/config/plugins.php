@@ -12,7 +12,7 @@ return array
 			),
 			'scripts' => array(
 				array('jquery', Scripts::FRAMEWORK),
-				array('mousewheel', Scripts::PLUGIN - 1),
+				array('mousewheel', Scripts::DEPENDENCY),
 				array('jscrollpane', Scripts::PLUGIN),
 			)
 		),
@@ -27,6 +27,16 @@ return array
 				array('jquery', Scripts::FRAMEWORK),
 				array('cyclelite', Scripts::PLUGIN),
 			),
+		),
+		'handsontable' => array(
+			'scripts' => array(
+				array('jquery', Scripts::FRAMEWORK),
+				array('autoresize', Scripts::DEPENDENCY),
+				array('handsontable', Scripts::PLUGIN),
+			),
+			'styles' => array(
+				array('handsontable', Styles::PLUGIN),
+			)
 		),
 	),
 );

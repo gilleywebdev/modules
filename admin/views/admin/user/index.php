@@ -1,6 +1,6 @@
 <?php echo View::factory('includes/forms/errors') ?>
 <p><a class="button" href="/admin/user/add">Add User</a></p>
-<table>
+<table class="data_table">
 	<thead>
 		<tr>
 			<th class="first">Username</th>

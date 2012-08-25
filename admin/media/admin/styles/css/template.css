@@ -181,36 +181,29 @@ h2 {
   background: #9C2F23; }
 
 /* Tables */
-table {
+.data_table {
   border-bottom: 1px solid #c9c9c9;
   margin: 15px 0; }
-
-th {
-  text-align: left;
-  color: #293744;
-  border-bottom: 1px solid #c9c9c9;
-  padding: 0 6px 4px; }
-
-td {
-  vertical-align: middle;
-  white-space: nowrap;
-  padding: 2px 6px;
-  height: 27px; }
-
-td.first {
-  border-left: 1px solid #c9c9c9; }
-
-td.last {
-  border-right: 1px solid #c9c9c9; }
-
-.edit, .delete {
-  text-align: center; }
-
-tbody tr:nth-child(odd) {
-  background: #e3e3e3; }
-
-tbody tr:nth-child(even) {
-  background: #f7f7f7; }
+  .data_table th {
+    text-align: left;
+    color: #293744;
+    border-bottom: 1px solid #c9c9c9;
+    padding: 0 6px 4px; }
+  .data_table td {
+    vertical-align: middle;
+    white-space: nowrap;
+    padding: 2px 6px;
+    height: 27px; }
+  .data_table td.first {
+    border-left: 1px solid #c9c9c9; }
+  .data_table td.last {
+    border-right: 1px solid #c9c9c9; }
+  .data_table .edit, .data_table .delete {
+    text-align: center; }
+  .data_table tbody tr:nth-child(odd) {
+    background: #e3e3e3; }
+  .data_table tbody tr:nth-child(even) {
+    background: #f7f7f7; }
 
 /* End table styles */
 .button {

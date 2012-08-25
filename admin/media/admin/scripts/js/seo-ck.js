@@ -1,0 +1,1 @@
+var container=$(".spreadsheet");container.handsontable({rows:3,cols:3,legend:[{match:function(e,t,n){return t===0},readOnly:!0}],rowHeaders:!1,colHeaders:["Page","Title","Description"]});var data=[["index","",""],["contact","",""],["thank-you","",""]];container.handsontable("loadData",data);

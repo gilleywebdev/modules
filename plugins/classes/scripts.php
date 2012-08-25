@@ -11,9 +11,11 @@ class Scripts {
 	
 	const FRAMEWORK = 0;
 	
-	const PLUGIN = 10;
+	const DEPENDENCY = 10;
 	
-	const CONTROLLER = 20;
+	const PLUGIN = 20;
+	
+	const CONTROLLER = 30;
 
 	protected static $_scripts = array();
 
