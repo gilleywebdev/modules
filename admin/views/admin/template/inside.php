@@ -21,8 +21,8 @@
 			</div>
 		</div>
 		<div id="preload">
-			<img src="/media/admin/graphics/button-hover.png">
+			<img src="/media/admin/graphics/button-hover.png" alt="">
 		</div>
 	</body>
+	<?php Scripts::output() ?>
 </html>
-<?php Scripts::output() ?>

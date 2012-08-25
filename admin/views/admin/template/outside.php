@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<?php echo View::factory('admin/includes/header')
-					->bind('title', $title) ?>
+				->bind('title', $title) ?>
 	</head>
 	<body class="<?php echo Request::current()->action(); ?>_page">
 		<div class="wrapper">
@@ -10,8 +10,6 @@
 				<?php echo $content ?>
 			</div>
 		</div>
+	<?php Scripts::output() ?>
 	</body>
 </html>
-<?php
-	Scripts::output()
-?>
