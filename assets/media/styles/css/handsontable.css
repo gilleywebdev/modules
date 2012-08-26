@@ -149,6 +149,9 @@ textarea.handsontableInput {
 .spreadsheet tbody td:nth-child(4), .spreadsheet tr.htColHeader th:nth-child(4) {
   max-width: 350px; }
 
+.spreadsheet tbody tr:last-child {
+  display: none; }
+
 .spreadsheet th {
   text-align: left;
   font-weight: bold; }

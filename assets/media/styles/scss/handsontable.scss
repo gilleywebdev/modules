@@ -178,6 +178,11 @@ textarea.handsontableInput {
 	max-width: 350px;
 }
 
+// Hide empty row
+.spreadsheet tbody tr:last-child {
+	display: none;
+}
+
 .spreadsheet th {
 	text-align: left;
 	font-weight: bold;

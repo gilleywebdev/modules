@@ -1,8 +1,8 @@
-var container = $(".spreadsheet");
+var $spreadsheet = $(".spreadsheet");
 var $google = $('.google');
 
-container.handsontable({
-    rows: 3,
+$spreadsheet.handsontable({
+    rows: 1,
     cols: 3,
 	legend: [
 		// Read only row headers, for copy/pasting
@@ -21,11 +21,11 @@ container.handsontable({
 		var googlePos = width + 15;
 		
 		$google.css('left', googlePos);
-		console.log(currentPos);
-	}
+	},
+	minSpareRows: 1, //always keep at least 1 spare row at the bottom
 });
 
-var handsontable = container.data('handsontable');
+var handsontable = $spreadsheet.data('handsontable');
 
 // Load data from database on pageload
 $.ajax({
@@ -53,14 +53,14 @@ $('.submit').click(function () {
 // Google Preview
 
 
-container.mousedown(function () {
+$spreadsheet.mousedown(function () {
 	// Move google to selected positon
 	var currentPos = $('.current').position();
 	$google.css('top', currentPos.top - 15);
 	$google.hide();
 });
 
-container.mouseup(function () {
+$spreadsheet.mouseup(function () {
 	selected = handsontable.getSelected(); // returns [`topLeftRow`, `topLeftCol`, `bottomRightRow`, `bottomRightCol`]
 
 	if(selected[0] === selected[2]) { // if a single row is selected
@@ -101,12 +101,12 @@ container.mouseup(function () {
 
 $('.handsontableInput').keyup(function () {
 	// Title
-	if (container.data('y') === 1) {
+	if ($spreadsheet.data('y') === 1) {
 		$('.google_title').text($(this).val());
 	}
 	
 	// Description
-	if (container.data('y') === 2) {
+	if ($spreadsheet.data('y') === 2) {
 		$('.google_description').text($(this).val());		
 	}
 });
