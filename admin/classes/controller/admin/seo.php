@@ -83,12 +83,8 @@ class Controller_Admin_Seo extends Controller_Admin {
 				);
 			}
 		}
-		
-		// It has to be in this format for handontable to read it
-		$obj = new stdClass;
-		$obj->data = $pages;
-		
-		$data = json_encode($obj);
+
+		$data = json_encode($pages);
 		
 		// View
 		$this->template = View::factory('admin/seo/load')

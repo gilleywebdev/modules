@@ -1,31 +1,32 @@
 var $spreadsheet = $(".spreadsheet");
 
-$spreadsheet.handsontable({
-    rows: 1,
-    cols: 3,
-	legend: [
-		// Read only row headers, for copy/pasting
-		{
-			match: function (row, col, data) {
-				return (col === 0); // if it is first column
-			},
-			readOnly: true // make it read-only
-		}
-	],
-    rowHeaders: false,
-    colHeaders: ["Page", "Title", "Description"],
-	minSpareRows: 1, //always keep at least 1 spare row at the bottom
-});
-
-var handsontable = $spreadsheet.data('handsontable');
-
 // Load data from database on pageload
 $.ajax({
 	url: "/admin/seo/load",
 	dataType: 'json',
 	type: 'GET',
 	success: function (res) {
-		handsontable.loadData(res.data);
+		var numRows = res.length;
+		
+		$spreadsheet.handsontable({
+		    rows: numRows,
+		    cols: 3,
+			legend: [
+				// Read only row headers, for copy/pasting
+				{
+					match: function (row, col, data) {
+						return (col === 0); // if it is first column
+					},
+					readOnly: true // make it read-only
+				}
+			],
+		    rowHeaders: false,
+		    colHeaders: ["Page", "Title", "Description"]
+		});
+
+		handsontable = $spreadsheet.data('handsontable');
+
+		handsontable.loadData(res);
 	}
 });
 
