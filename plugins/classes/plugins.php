@@ -4,13 +4,16 @@ class Plugins{
 	public static function init($profile = 'default')
 	{
 		$plugins = Kohana::$config->load('plugins');
-		if (! empty($plugins['enabled'][$profile]))
+
+		// Check the profile
+		if ( ! empty($plugins['enabled'][$profile]))
 		{
 			foreach ($plugins['enabled'][$profile] AS $plugin)
 			{
+				// Check if the specified plugin is available
 				if ($plugin = $plugins['available'][$plugin])
 				{					
-					// Styles
+					// Add styles
 					if (isset($plugin['styles']))
 					{
 						$styles = $plugin['styles'];
@@ -20,7 +23,7 @@ class Plugins{
 						}
 					}
 
-					// Scripts
+					// Add scripts
 					if (isset($plugin['scripts']))
 					{
 						$scripts = $plugin['scripts'];
