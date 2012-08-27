@@ -3,7 +3,7 @@
 class Scripts extends Media {
 	const EXT = '.js';
 
-	const JS_PATH = 'scripts/js/';
+	const JS_PATH = 'scripts/max/';
 
 	const PROD_JS_SCRIPT = 'script.js';
 	
