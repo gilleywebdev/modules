@@ -66,11 +66,11 @@ class Controller_Admin_Auth extends Controller_Template {
 							->values($data)
 							->create();
 							
-				$link = 'http://'.$_SERVER['SERVER_NAME'].'/admin/auth/reset/'.$token->token;
+				$link = 'http://'.DOMAIN.'/admin/auth/reset/'.$token->token;
 
 				//Mail
 				$subject = 'Password request for '.$user->username;
-				$from = 'info@'.$_SERVER['SERVER_NAME'];
+				$from = 'info@'.DOMAIN;
 				$to = $user->email;
 				$message = View::factory('admin/emails/forgotpassword')
 					->set('link', $link);
