@@ -70,7 +70,7 @@ class Scripts {
 		}
 		
 		// Sort the scripts by priority
-		$scripts = Scripts::sksort(Scripts::$_scripts, 'priority', TRUE);
+		$scripts = Scripts::subkey_sort(Scripts::$_scripts, 'priority');
 
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
@@ -89,35 +89,23 @@ class Scripts {
 		}
 	}
 
-	private static function sksort($array, $subkey, $sort_ascending=false) {
+	private static function subkey_sort(array $input, $subkey) {
+		$sort_me = array();
+		
+		foreach($input AS $key => $subarray)
+		{
+			$sort_me[$key] = $subarray[$subkey];
+		}
+		
+		asort($sort_me);
 
-	    if (count($array))
-	        $temp_array[key($array)] = array_shift($array);
-		else
-			return array();
-
-	    foreach($array as $key => $val){
-	        $offset = 0;
-	        $found = false;
-	        foreach($temp_array as $tmp_key => $tmp_val)
-	        {
-	            if(!$found and strtolower($val[$subkey]) > strtolower($tmp_val[$subkey]))
-	            {
-	                $temp_array = array_merge(    (array)array_slice($temp_array,0,$offset),
-	                                            array($key => $val),
-	                                            array_slice($temp_array,$offset)
-	                                          );
-	                $found = true;
-	            }
-	            $offset++;
-	        }
-	        if(!$found) $temp_array = array_merge($temp_array, array($key => $val));
-	    }
-
-	    if ($sort_ascending) $array = array_reverse($temp_array);
-
-	    else $array = $temp_array;
-	
-		return $array;
+		$return_me = array();
+		
+		foreach($sort_me AS $key => $priority)
+		{
+			$return_me[] = $input[$key];
+		}
+		
+		return $return_me;
 	}
 }
