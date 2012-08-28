@@ -2,8 +2,21 @@
 
 class Controller_Admin_Seo extends Controller_Admin {
 
-	public function action_index()
+	public function before()
 	{
+		parent::before();
+
+		// If not installed
+		if ( ! DB::check_for_tables('pages'))
+		{
+			//Install
+			$query = View::factory('admin/install/seo');
+			$result = DB::query(Database::INSERT, $query)->execute();
+		}
+	}
+
+	public function action_index()
+	{	
 		// Post
 		if ($post = Form::post())
 		{
@@ -93,6 +106,7 @@ class Controller_Admin_Seo extends Controller_Admin {
 	
 	public function action_save()
 	{
+		// Called with ajax
 		$post = $this->request->post();
 		$data = $post['data'];
 
