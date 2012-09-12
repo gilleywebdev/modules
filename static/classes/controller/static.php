@@ -51,10 +51,11 @@ class Controller_Static extends Controller_Template {
 		$this->template
 			->bind('title', $this->title)
 			->bind('description', $this->description);
+			
+		Helper::$pagename = $this->pagename;
 		
 		$this->template->content = $this->content;
 
 		parent::after();
 	}
-
 }
