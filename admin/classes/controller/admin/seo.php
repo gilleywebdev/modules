@@ -91,8 +91,8 @@ class Controller_Admin_Seo extends Controller_Admin {
 				// No DB entry, placeholders
 				$pages[] = array(
 					$pagename,
-					'*** NEEDS TITLE ***',
-					'*** NEEDS DESCRIPTION ***',
+					'',
+					'',
 				);
 			}
 		}

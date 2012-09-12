@@ -18,10 +18,18 @@ $.ajax({
 						return (col === 0); // if it is first column
 					},
 					readOnly: true // make it read-only
+				},
+				{
+					match: function (row, col, data) {
+						return (data()[row][col] === '');
+					},
+					style: {
+						background: '#f9d3d3'
+					}
 				}
 			],
 		    rowHeaders: false,
-		    colHeaders: ["Page", "Title", "Description"]
+		    colHeaders: ["Page", "Title", "Description"],
 		});
 
 		handsontable = $spreadsheet.data('handsontable');
