@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Helper {
+class Kohana_Helper {
 	public static $pagename = '';
 	
 	public static function active($check)
