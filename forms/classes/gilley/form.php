@@ -98,6 +98,11 @@ class Gilley_Form extends Kohana_Form {
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
 
+		if ($value === NULL and isset($_POST[$name]))
+		{
+			$value = $_POST[$name];
+		}
+		
 		$inner .= Form::input($name, $value, $attributes);
 
 		return Form::wrap(
@@ -110,7 +115,7 @@ class Gilley_Form extends Kohana_Form {
 	public static function date($name, $value = NULL, array $attributes = NULL)
 	{
 		$attributes['class'] = 'datepick';
-		
+
 		return Form::text(
 			$name,
 			$value,
@@ -122,7 +127,7 @@ class Gilley_Form extends Kohana_Form {
 	{
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
-		
+
 		$inner .= parent::password($name, $value, $attributes);
 
 		return Form::wrap(
@@ -136,7 +141,12 @@ class Gilley_Form extends Kohana_Form {
 	{
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
-		
+
+		if ($value === NULL and isset($_POST[$name]))
+		{
+			$value = $_POST[$name];
+		}
+
 		$inner .= parent::file($name, $attributes);
 
 		return Form::wrap(
@@ -151,6 +161,11 @@ class Gilley_Form extends Kohana_Form {
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
 		
+		if ($value === NULL and isset($_POST[$name]))
+		{
+			$value = $_POST[$name];
+		}
+		
 		$inner .= parent::select($name, $options, $selected, $attributes);
 
 		return Form::wrap(
@@ -164,6 +179,11 @@ class Gilley_Form extends Kohana_Form {
 	{
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
+		
+		if ($body === NULL and isset($_POST[$name]))
+		{
+			$body = $_POST[$name];
+		}
 		
 		$inner .= parent::textarea($name, $body, $attributes, $double_encode);
 
@@ -198,6 +218,11 @@ class Gilley_Form extends Kohana_Form {
 	{
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
+
+		if ($value === NULL and isset($_POST[$name]))
+		{
+			$value = $_POST[$name];
+		}
 
 		$inner .= parent::checkbox($name, $value, $checked, $attributes);
 
