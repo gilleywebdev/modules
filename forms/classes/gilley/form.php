@@ -88,6 +88,10 @@ class Gilley_Form extends Kohana_Form {
 	/* Form Field Extensions */
 	public static function open($action = NULL, array $attributes = NULL)
 	{
+		if ($action === NULL) {
+			$action = Request::current();
+		}
+
 		$return = parent::open($action, $attributes);
 		$return .= Form::action();
 		return $return;
@@ -98,11 +102,13 @@ class Gilley_Form extends Kohana_Form {
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
 
+		// Keep inputted text in case of error
 		if ($value === NULL and isset($_POST[$name]))
 		{
 			$value = $_POST[$name];
 		}
-		
+
+		$attributes['id'] = $name;
 		$inner .= Form::input($name, $value, $attributes);
 
 		return Form::wrap(
@@ -128,6 +134,7 @@ class Gilley_Form extends Kohana_Form {
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
 
+		$attributes['id'] = $name;
 		$inner .= parent::password($name, $value, $attributes);
 
 		return Form::wrap(
@@ -142,11 +149,13 @@ class Gilley_Form extends Kohana_Form {
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
 
+		// Keep inputted text in case of error
 		if ($value === NULL and isset($_POST[$name]))
 		{
 			$value = $_POST[$name];
 		}
 
+		$attributes['id'] = $name;
 		$inner .= parent::file($name, $attributes);
 
 		return Form::wrap(
@@ -160,12 +169,14 @@ class Gilley_Form extends Kohana_Form {
 	{
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
-		
+
+		// Keep inputted text in case of error
 		if ($value === NULL and isset($_POST[$name]))
 		{
 			$value = $_POST[$name];
 		}
-		
+
+		$attributes['id'] = $name;
 		$inner .= parent::select($name, $options, $selected, $attributes);
 
 		return Form::wrap(
@@ -180,11 +191,13 @@ class Gilley_Form extends Kohana_Form {
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
 		
+		// Keep inputted text in case of error
 		if ($body === NULL and isset($_POST[$name]))
 		{
 			$body = $_POST[$name];
 		}
-		
+
+		$attributes['id'] = $name;
 		$inner .= parent::textarea($name, $body, $attributes, $double_encode);
 
 		return Form::wrap(
@@ -219,11 +232,13 @@ class Gilley_Form extends Kohana_Form {
 		// if $attributes['label'] is set, append an html label and unset it
 		$inner = ($label = Form::intercept($attributes, 'label')) ? Form::label($name, $label) : '';
 
+		// Keep inputted text in case of error
 		if ($value === NULL and isset($_POST[$name]))
 		{
 			$value = $_POST[$name];
 		}
 
+		$attributes['id'] = $name;
 		$inner .= parent::checkbox($name, $value, $checked, $attributes);
 
 		return Form::wrap(
@@ -239,7 +254,7 @@ class Gilley_Form extends Kohana_Form {
 		return '<div class="'.$name.' '.$class.' wrap">'.$string.'</div>';
 	}
 	
-	protected static function intercept($attributes, $key)
+	protected static function intercept(&$attributes, $key)
 	{
 		if (isset($attributes[$key]))
 		{
