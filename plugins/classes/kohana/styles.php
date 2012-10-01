@@ -36,7 +36,7 @@ class Kohana_Styles extends Media{
 		// if production, everything below 20 should be in this
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			echo HTML::style(Styles::CSS_PATH.Styles::PROD_CSS_SHEET);	
+			echo HTML::style(Styles::MEDIA_FOLDER.Styles::CSS_PATH.Styles::PROD_CSS_SHEET);	
 		}
 
 		foreach ($sheets AS $sheet)

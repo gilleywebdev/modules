@@ -29,7 +29,7 @@ class Kohana_Scripts extends Media {
 
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			echo HTML::style(Scripts::JS_PATH.Scripts::PROD_JS_SCRIPT);	
+			echo HTML::style(Scripts::MEDIA_FOLDER.Scripts::JS_PATH.Scripts::PROD_JS_SCRIPT);	
 		}
 
 		foreach($scripts AS $script)
