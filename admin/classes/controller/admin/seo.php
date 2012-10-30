@@ -16,7 +16,8 @@ class Controller_Admin_Seo extends Controller_Admin {
 	}
 
 	public function action_index()
-	{	
+	{
+/*
 		// Post
 		if ($post = Form::post())
 		{
@@ -24,32 +25,38 @@ class Controller_Admin_Seo extends Controller_Admin {
 			$seo = array();
 			foreach ($post->data() AS $key => $value)
 			{
-				// key is name_title or name_description
+				// key is name + "_title" or name + "_description"
 				$key_shards = explode('_', $key);
 				$pagename = $key_shards[0];
 				$tag_type = $key_shards[1];
 				
 				$seo[$pagename][$tag_type] = $value;
 			}
-			
+
 			// Take array and put into database
 			foreach ($seo AS $pagename => $tags)
 			{
+				echo 'what the fuck';
 				$page = ORM::factory('page')
 				    ->where('pagename', '=', $pagename)
 				    ->find();
-
-					$page->pagename = $pagename;
-					$page->title = $tags['title'];
-					$page->description = $tags['description'];
 				
-					$page->save();
+				if ( ! $page)
+				{
+					$page = ORM::create();
+				}
+
+				$page->pagename = $pagename;
+				$page->title = $tags['title'];
+				$page->description = $tags['description'];
+				
+				$page->save();
 			}
 			
 			// Success
 			Form::success('admin/seo', 'seo_updated');
 		}
-
+*/
 		// Messaging Center
 		Form::messaging_center('admin/seo', 'var', 'subvar');
 
@@ -116,12 +123,16 @@ class Controller_Admin_Seo extends Controller_Admin {
 				->where('pagename', '=', $datum[0])
 			    ->find();
 			
-			if($page->loaded())
+			if( ! $page->loaded())
 			{
-				$page->title = $datum[1];
-				$page->description = $datum[2];
-				$page->save();
+				// New entry
+				$page = ORM::factory('page');
+				$page->pagename = $datum[0];
 			}
+
+			$page->title = $datum[1];
+			$page->description = $datum[2];
+			$page->save();
 		}
 	
 		$this->template = View::factory('admin/seo/save');
