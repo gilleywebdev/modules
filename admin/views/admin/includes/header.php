@@ -5,7 +5,9 @@
 <title><?php echo $title ?></title>
 
 <!-- Styles -->
-<?php Styles::output(array(
+<?php Styles::output(
+	array('admin', 'styles'),
+	array(
 		array('normalize', Styles::BASE),
 		array(array('admin', 'template'), Styles::TEMPLATE),
 	)) ?>

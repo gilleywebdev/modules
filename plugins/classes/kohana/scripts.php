@@ -3,9 +3,9 @@
 class Kohana_Scripts extends Media {
 	const EXT = '.js';
 
-	const JS_PATH = 'scripts/max/';
-
-	const PROD_JS_SCRIPT = 'script.js';
+	const JS_PATH_DEV = 'scripts/max/';
+	
+	const JS_PATH_PROD = 'scripts/min/';
 	
 	const FRAMEWORK = 0;
 	
@@ -20,25 +20,52 @@ class Kohana_Scripts extends Media {
 		parent::add($name, $priority, $type);
 	}
 
-	public static function output($defaults = array())
-	{	
-		Scripts::add_defaults($defaults, 'scripts');
+	public static function output($prod_script = NULL, $defaults = NULL)
+	{
+		if ($defaults !== NULL)
+		{
+			Scripts::add_defaults($defaults, 'scripts');
+		}
 		
 		// Sort the scripts by priority
 		$scripts = Scripts::prepare(Scripts::$_buffer, 'priority', 'scripts');
 
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			echo HTML::style(Scripts::MEDIA_FOLDER.Scripts::JS_PATH.Scripts::PROD_JS_SCRIPT);	
+			$scripts_folder = Scripts::JS_PATH_PROD;
+			$min = '.min';
+
+			// Break prefixes out of the first parameter
+			if (is_array($prod_script))
+			{
+				$prefix = $prod_script[0].'/';
+				$name = $prod_script[1];
+			}
+			else
+			{
+				$prefix = NULL;
+				$name = $prod_script;
+			}
+
+			if ($prod_script !== NULL)
+			{
+				echo HTML::script(Scripts::MEDIA_FOLDER.$prefix.$scripts_folder.$name.$min.Scripts::EXT);
+			}
+		}
+		else
+		{
+			$scripts_folder = Scripts::JS_PATH_DEV;
+			$min = '';
 		}
 
 		foreach($scripts AS $script)
 		{
 			$prefix = $script['prefix'] ? $script['prefix'].'/' : '';
 			
-			if ((Kohana::$environment !== Kohana::PRODUCTION))
+			// Dev: everything, Prod:priority > 20
+			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($script['priority'] > Scripts::PLUGIN))
 			{
-				$path = Scripts::MEDIA_FOLDER.$prefix.Scripts::JS_PATH.$script['name'].Scripts::EXT;
+				$path = Scripts::MEDIA_FOLDER.$prefix.$scripts_folder.$script['name'].$min.Scripts::EXT;
 				echo HTML::script($path);
 			}
 		}

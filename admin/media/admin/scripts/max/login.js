@@ -1,2 +1,2 @@
-var login = document.getElementById('user_login');
+var login = document.getElementById('username');
 login.focus();

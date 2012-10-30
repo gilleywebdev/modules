@@ -7,8 +7,6 @@ class Kohana_Styles extends Media{
 
 	const CSS_PATH = 'styles/css/';
 
-	const PROD_CSS_SHEET = 'styles.css';
-
 	const BASE = 0; // Reset, normalize, etc.
 	
 	const INCLUDED = 10; // Forms, colors
@@ -26,9 +24,12 @@ class Kohana_Styles extends Media{
 		parent::add($name, $priority, $type);
 	}
 	
-	public static function output ($defaults = array())
+	public static function output ($prod_sheet = NULL, $defaults = array())
 	{
-		Styles::add_defaults($defaults, 'styles');
+		if ($defaults !== NULL)
+		{
+			Styles::add_defaults($defaults, 'styles');
+		}
 
 		// Sort the sheets by priority
 		$sheets = Styles::prepare(Styles::$_buffer, 'priority', 'styles');
@@ -36,14 +37,29 @@ class Kohana_Styles extends Media{
 		// if production, everything below 20 should be in this
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			echo HTML::style(Styles::MEDIA_FOLDER.Styles::CSS_PATH.Styles::PROD_CSS_SHEET);	
+			// Break prefixes out of the first parameter
+			if (is_array($prod_sheet))
+			{
+				$prefix = $prod_sheet[0].'/';
+				$name = $prod_sheet[1];
+			}
+			else
+			{
+				$prefix = NULL;
+				$name = $prod_sheet;
+			}
+
+			if ($prod_sheet !== NULL)
+			{
+				echo HTML::style(Styles::MEDIA_FOLDER.$prefix.Styles::CSS_PATH.$name.Styles::POST_EXT);
+			}
 		}
 
 		foreach ($sheets AS $sheet)
 		{
 			$prefix = $sheet['prefix']? $sheet['prefix'].'/' : '';
 			// Dev: everything, Prod:priority > 20
-			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($sheet['priority'] > 20))
+			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($sheet['priority'] > Styles::TEMPLATE))
 			{
 				// Set the path up
 				$path = Styles::MEDIA_FOLDER.$prefix.Styles::CSS_PATH.$sheet['name'].Styles::POST_EXT;
