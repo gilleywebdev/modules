@@ -156,24 +156,3 @@ textarea.handsontableInput {
   height: 1px;
   overflow: hidden;
 }
-
-/* Added by Gilley */
-
-// Title
-.spreadsheet tbody td:nth-child(3), .spreadsheet tr.htColHeader th:nth-child(3) {
-	max-width: 220px;
-}
-
-// Description
-.spreadsheet tbody td:nth-child(4), .spreadsheet tr.htColHeader th:nth-child(4) {
-	max-width: 350px;
-}
-
-.spreadsheet th {
-	text-align: left;
-	font-weight: bold;
-}
-
-.spreadsheet .htRowHeader {
-	min-width: 0;
-}
