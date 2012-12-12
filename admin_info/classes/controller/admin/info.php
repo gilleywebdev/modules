@@ -26,7 +26,7 @@ class Controller_Admin_Info extends Controller_Admin {
 		$values = $config->as_array();
 		
 		// View
-		Styles::add(array('admin','info'), Styles::PAGE);
+		Styles::add('admin/info', Styles::PAGE);
 		$this->template->title = 'Edit Info';
 		$this->template->content = View::factory('admin/info/index')
 			->bind('labels', $labels)

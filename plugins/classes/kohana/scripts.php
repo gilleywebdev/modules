@@ -36,10 +36,12 @@ class Kohana_Scripts extends Media {
 			$min = '.min';
 
 			// Break prefixes out of the first parameter
-			if (is_array($prod_script))
+			if (strpos($prod_script, '/') !== FALSE)
 			{
-				$prefix = $prod_script[0].'/';
-				$name = $prod_script[1];
+				$pieces = explode('/', $prod_script);
+
+				$name = array_pop($pieces);
+				$prefix = implode('/', $pieces);
 			}
 			else
 			{

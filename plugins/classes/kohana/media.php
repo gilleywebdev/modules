@@ -15,10 +15,12 @@ abstract class Kohana_Media {
 		}
 		else{
 			// Break prefixes out of the first parameter
-			if (is_array($name))
+			if (strpos($name, '/') !== FALSE)
 			{
-				$prefix = $name[0];
-				$name = $name[1];
+				$pieces = explode('/', $name);
+
+				$name = array_pop($pieces);
+				$prefix = implode('/', $pieces);
 			}
 			else
 			{
@@ -85,4 +87,5 @@ abstract class Kohana_Media {
 		
 		return $return_me;
 	}
+	
 }

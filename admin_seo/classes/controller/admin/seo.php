@@ -24,8 +24,8 @@ class Controller_Admin_Seo extends Controller_Admin {
 		$this->template->title = 'SEO';
 		$this->template->content = View::factory('admin/seo/index');
 
-		Scripts::add(array('admin', 'seo'), Scripts::CONTROLLER);
-		Styles::add(array('admin', 'seo'), Styles::PAGE);
+		Scripts::add('admin/seo', Scripts::CONTROLLER);
+		Styles::add('admin/seo', Styles::PAGE);
 	}
 	
 	public function action_load()

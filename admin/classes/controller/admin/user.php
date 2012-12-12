@@ -97,7 +97,7 @@ class Controller_Admin_User extends Controller_Admin {
 		}
 
 		// View
-		Styles::add(array('admin', 'delete'), Styles::PAGE);
+		Styles::add('admin/delete', Styles::PAGE);
 		$this->template->content = View::factory('admin/user/delete')->bind('user', $user);
 		$this->template->title = 'Delete User';
 	}

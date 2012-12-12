@@ -38,10 +38,12 @@ class Kohana_Styles extends Media{
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
 			// Break prefixes out of the first parameter
-			if (is_array($prod_sheet))
+			if (strpos($prod_sheet, '/') !== FALSE)
 			{
-				$prefix = $prod_sheet[0].'/';
-				$name = $prod_sheet[1];
+				$pieces = explode('/', $prod_sheet);
+
+				$name = array_pop($pieces);
+				$prefix = implode('/', $pieces);
 			}
 			else
 			{
