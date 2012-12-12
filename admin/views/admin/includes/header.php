@@ -7,8 +7,7 @@
 <!-- Styles -->
 
 <?php
-	Styles::output(
-		array('admin/styles'),
+	Styles::output('admin/styles',
 		array(
 			array('normalize', Styles::BASE),
 			array('admin/template', Styles::TEMPLATE),
