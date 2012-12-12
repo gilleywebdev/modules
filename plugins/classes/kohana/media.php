@@ -15,23 +15,13 @@ abstract class Kohana_Media {
 		}
 		else{
 			// Break prefixes out of the first parameter
-			if (strpos($name, '/') !== FALSE)
-			{
-				$pieces = explode('/', $name);
-
-				$name = array_pop($pieces);
-				$prefix = implode('/', $pieces);
-			}
-			else
-			{
-				$prefix = NULL;
-			}
-
+			$file = Media::parse($name);
+			
 			// Add it to the buffer
 			Media::$_buffer[] = array(
-				'name' => $name,
+				'name' => $file['name'],
 				'priority' => $priority,
-				'prefix' => $prefix,
+				'prefix' => $file['prefix'],
 				'type' => $type
 			);
 
@@ -88,4 +78,23 @@ abstract class Kohana_Media {
 		return $return_me;
 	}
 	
+	protected static function parse ($name)
+	{
+		$file = array();
+
+		if (strpos($name, '/') !== FALSE)
+		{
+			$pieces = explode('/', $name);
+
+			$file['name'] = array_pop($pieces);
+			$file['prefix'] = implode('/', $pieces).'/';
+		}
+		else
+		{
+			$file['prefix'] = '';
+			$file['name'] = $name;
+		}
+		
+		return $file;
+	}
 }

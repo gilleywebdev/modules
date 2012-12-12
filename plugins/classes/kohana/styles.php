@@ -11,21 +11,20 @@ class Kohana_Styles extends Media{
 	
 	const INCLUDED = 10; // Forms, colors
 
-	const TEMPLATE = 20; // Global stylsheet
+	const PLUGIN = 20; // CSS for JS plugins
 
-	const CATEGORY = 30; // Subpage, admin
+	const TEMPLATE = 30; // Global stylsheet
 
-	const PLUGIN = 40; // CSS for JS plugins
-
-	const PAGE = 50; // 1-page tweaks
+	const PAGE = 40; // 1-page tweaks
 	
 	public static function add ($name, $priority, $type = 'styles')
 	{
 		parent::add($name, $priority, $type);
 	}
 	
-	public static function output ($prod_sheet = NULL, $defaults = array())
+	public static function output ($prodfile = NULL, $defaults = NULL)
 	{
+		// Add defaults
 		if ($defaults !== NULL)
 		{
 			Styles::add_defaults($defaults, 'styles');
@@ -34,37 +33,25 @@ class Kohana_Styles extends Media{
 		// Sort the sheets by priority
 		$sheets = Styles::prepare(Styles::$_buffer, 'priority', 'styles');
 
-		// if production, everything below 20 should be in this
+		// if production
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			// Break prefixes out of the first parameter
-			if (strpos($prod_sheet, '/') !== FALSE)
-			{
-				$pieces = explode('/', $prod_sheet);
+			// Parse for slashes
+			$file = Media::parse($prodfile);
 
-				$name = array_pop($pieces);
-				$prefix = implode('/', $pieces);
-			}
-			else
+			// Production (combined, compressed) stylesheet
+			if ($prodfile !== NULL)
 			{
-				$prefix = NULL;
-				$name = $prod_sheet;
-			}
-
-			if ($prod_sheet !== NULL)
-			{
-				echo HTML::style(Styles::MEDIA_FOLDER.$prefix.Styles::CSS_PATH.$name.Styles::POST_EXT);
+				echo HTML::style(Styles::MEDIA_FOLDER.$file['prefix'].Styles::CSS_PATH.$file['name'].Styles::POST_EXT);
 			}
 		}
 
-		foreach ($sheets AS $sheet)
+		foreach ($sheets AS $file)
 		{
-			$prefix = $sheet['prefix']? $sheet['prefix'].'/' : '';
-			// Dev: everything, Prod:priority > 20
+			// Dev: output everything, Prod: only if more specific than template (otherwise it's in the combined prod stylesheet)
 			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($sheet['priority'] > Styles::TEMPLATE))
 			{
-				// Set the path up
-				$path = Styles::MEDIA_FOLDER.$prefix.Styles::CSS_PATH.$sheet['name'].Styles::POST_EXT;
+				$path = Styles::MEDIA_FOLDER.$file['prefix'].Styles::CSS_PATH.$file['name'].Styles::POST_EXT;
 				echo HTML::style($path);
 			}
 		}

@@ -4,15 +4,15 @@ class Kohana_Scripts extends Media {
 	const EXT = '.js';
 
 	const JS_PATH_DEV = 'scripts/max/';
-	
+
 	const JS_PATH_PROD = 'scripts/min/';
-	
+
 	const FRAMEWORK = 0;
-	
+
 	const DEPENDENCY = 10;
-	
+
 	const PLUGIN = 20;
-	
+
 	const CONTROLLER = 30;
 
 	public static function add($name, $priority, $type = 'scripts')
@@ -20,8 +20,9 @@ class Kohana_Scripts extends Media {
 		parent::add($name, $priority, $type);
 	}
 
-	public static function output($prod_script = NULL, $defaults = NULL)
+	public static function output ($prodfile = NULL, $defaults = NULL)
 	{
+		// Add defaults
 		if ($defaults !== NULL)
 		{
 			Scripts::add_defaults($defaults, 'scripts');
@@ -32,42 +33,32 @@ class Kohana_Scripts extends Media {
 
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			$scripts_folder = Scripts::JS_PATH_PROD;
+			// Production settings
+			$folder = Scripts::JS_PATH_PROD;
 			$min = '.min';
 
-			// Break prefixes out of the first parameter
-			if (strpos($prod_script, '/') !== FALSE)
-			{
-				$pieces = explode('/', $prod_script);
+			// Parse for slashes
+			$file = Media::parse($prodfile);
 
-				$name = array_pop($pieces);
-				$prefix = implode('/', $pieces);
-			}
-			else
+			// Production (combined, compressed) script
+			if ($prodfile !== NULL)
 			{
-				$prefix = NULL;
-				$name = $prod_script;
-			}
-
-			if ($prod_script !== NULL)
-			{
-				echo HTML::script(Scripts::MEDIA_FOLDER.$prefix.$scripts_folder.$name.$min.Scripts::EXT);
+				echo HTML::script(Scripts::MEDIA_FOLDER.$file['prefix'].$folder.$file['name'].$min.Scripts::EXT);
 			}
 		}
 		else
 		{
-			$scripts_folder = Scripts::JS_PATH_DEV;
+			// Development settings
+			$folder = Scripts::JS_PATH_DEV;
 			$min = '';
 		}
 
-		foreach($scripts AS $script)
+		foreach($scripts AS $file)
 		{
-			$prefix = $script['prefix'] ? $script['prefix'].'/' : '';
-			
-			// Dev: everything, Prod:priority > 20
-			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($script['priority'] > Scripts::PLUGIN))
+			// Dev: output everything, Prod: only if more specific than plugin (otherwise it's in the combined prod script)
+			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($file['priority'] > Scripts::PLUGIN))
 			{
-				$path = Scripts::MEDIA_FOLDER.$prefix.$scripts_folder.$script['name'].$min.Scripts::EXT;
+				$path = Scripts::MEDIA_FOLDER.$file['prefix'].$folder.$file['name'].$min.Scripts::EXT;
 				echo HTML::script($path);
 			}
 		}
