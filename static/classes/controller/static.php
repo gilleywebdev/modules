@@ -24,10 +24,7 @@ class Controller_Static extends Controller_Template {
 			throw new HTTP_Exception_404($this->pagename.' not found');
 		}
 		else
-		{
-			// Initialize plugins
-			Plugins::init();
-			
+		{	
 			// Bind it to a variable for use in views
 			View::bind_global('pagename', $this->pagename);
 

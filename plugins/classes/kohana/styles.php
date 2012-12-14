@@ -29,9 +29,15 @@ class Kohana_Styles extends Media{
 		parent::add_defaults($profile, $type);
 	}
 
+	protected static function add_plugins($profile, $type = 'styles')
+	{
+		parent::add_plugins($profile, $type);
+	}
+
 	public static function output ($profile = 'default')
 	{
 		Styles::add_defaults($profile);
+		Styles::add_plugins($profile);
 
 		// Sort the sheets by priority
 		$sheets = Styles::prepare(Styles::$_buffer, 'priority', 'styles');
@@ -39,27 +45,44 @@ class Kohana_Styles extends Media{
 		// if production
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			/*
-			// Parse for slashes
-			$file = Media::parse($prodfile);
-
-			// Production (combined, compressed) stylesheet
-			if ($prodfile !== NULL)
-			{
-				echo HTML::style(Styles::MEDIA_FOLDER.$file['prefix'].Styles::CSS_PATH.$file['name'].Styles::POST_EXT);
-			}
-			*/
-			echo HTML::style('/styles/'.$profile);
+			echo HTML::style('prod/styles/'.$profile.Styles::POST_EXT);
 		}
 
 		foreach ($sheets AS $file)
 		{
 			// Dev: output everything, Prod: only if more specific than template (otherwise it's in the combined prod stylesheet)
-			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($sheet['priority'] > Styles::CUTOFF))
+			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($file['priority'] > Styles::CUTOFF))
 			{
 				$path = Styles::MEDIA_FOLDER.$file['prefix'].Styles::CSS_PATH.$file['name'].Styles::POST_EXT;
 				echo HTML::style($path);
 			}
 		}
+	}
+	
+	public static function prepare_production_file ($profile = 'default')
+	{
+		Styles::add_defaults($profile);
+		Styles::add_plugins($profile);
+		
+		// Sort the sheets by priority
+		$sheets = Styles::prepare(Styles::$_buffer, 'priority', 'styles');
+		
+		$return = array();
+		foreach ($sheets AS $file)
+		{
+			// Add in everything that is global
+			if ($file['priority'] <= Styles::CUTOFF)
+			{
+				$path = $file['prefix'].Styles::CSS_PATH.$file['name'];
+				$return_file = array(
+					'path' => $path,
+					'ext' => 'css',
+				);
+				
+				$return[] = $return_file;
+			}
+		}
+		
+		return $return;
 	}
 }

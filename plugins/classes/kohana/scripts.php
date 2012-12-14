@@ -22,13 +22,20 @@ class Kohana_Scripts extends Media {
 		parent::add($name, $priority, $type);
 	}
 
-	public static function output ($prodfile = NULL, $defaults = NULL)
+	protected static function add_defaults($profile, $type = 'scripts')
 	{
-		// Add defaults
-		if ($defaults !== NULL)
-		{
-			Scripts::add_defaults($defaults, 'scripts');
-		}
+		parent::add_defaults($profile, $type);
+	}
+
+	protected static function add_plugins($profile, $type = 'scripts')
+	{
+		parent::add_plugins($profile, $type);
+	}
+
+	public static function output ($profile = 'default')
+	{
+		Scripts::add_defaults($profile);
+		Scripts::add_plugins($profile);
 		
 		// Sort the scripts by priority
 		$scripts = Scripts::prepare(Scripts::$_buffer, 'priority', 'scripts');
@@ -39,14 +46,7 @@ class Kohana_Scripts extends Media {
 			$folder = Scripts::JS_PATH_PROD;
 			$min = '.min';
 
-			// Parse for slashes
-			$file = Media::parse($prodfile);
-
-			// Production (combined, compressed) script
-			if ($prodfile !== NULL)
-			{
-				echo HTML::script(Scripts::MEDIA_FOLDER.$file['prefix'].$folder.$file['name'].$min.Scripts::EXT);
-			}
+			echo HTML::script('prod/scripts/'.$profile.Scripts::EXT);
 		}
 		else
 		{
@@ -65,4 +65,32 @@ class Kohana_Scripts extends Media {
 			}
 		}
 	}
+
+	public static function prepare_production_file ($profile = 'default')
+	{
+		Scripts::add_defaults($profile);
+		Scripts::add_plugins($profile);
+		
+		// Sort the sheets by priority
+		$scripts = Scripts::prepare(Scripts::$_buffer, 'priority', 'scripts');
+		
+		$return = array();
+		foreach ($scripts AS $file)
+		{
+			// Add in everything that is global
+			if ($file['priority'] <= Scripts::CUTOFF)
+			{
+				$path = $file['prefix'].Scripts::JS_PATH_PROD.$file['name'];
+				$return_file = array(
+					'path' => $path,
+					'ext' => 'min.js',
+				);
+				
+				$return[] = $return_file;
+			}
+		}
+		
+		return $return;
+	}
+
 }

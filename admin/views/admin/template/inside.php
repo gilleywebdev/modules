@@ -24,5 +24,5 @@
 			<img src="/media/admin/graphics/button-hover.png" alt="">
 		</div>
 	</body>
-	<?php Scripts::output('admin_inside') ?>
+	<?php Scripts::output('admin') ?>
 </html>

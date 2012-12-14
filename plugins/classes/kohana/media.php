@@ -29,21 +29,48 @@ abstract class Kohana_Media {
 		}
 	}
 	
-	// Make sure it's an array of arrays and then add those to the buffer
+	// Add global styles & scripts from config files
 	protected static function add_defaults ($profile, $type)
 	{
-		$config = Kohana::$config->load('styles');
+		$config = Kohana::$config->load($type);
 		
 		$defaults = $config->get($profile);
 
-		foreach($defaults AS $default)
+		if (is_array($defaults))
 		{
-			if (is_array($default))
+			foreach($defaults AS $default)
 			{
-				Media::add($default[0], $default[1], $type);
+				if (is_array($default))
+				{
+					Media::add($default[0], $default[1], $type);
+				}
+				else {
+					throw new Kohana_Exception('Expected array, given '.$default.' in add_defaults()');
+				}
 			}
-			else {
-				throw new Kohana_Exception('Expected array, given '.$default.' in add_defaults()');
+		}
+	}
+	
+	protected static function add_plugins ($profile, $type)
+	{
+		$plugins_config = Kohana::$config->load('plugins');
+		$schemas_config = Kohana::$config->load('pluginschemas');
+		
+		$plugins = $plugins_config->get($profile);
+
+		if (is_array($plugins))
+		{
+			foreach($plugins AS $plugin)
+			{
+				$schema = $schemas_config->get($plugin);
+				if (is_array($schema[$type]))
+				{
+					$files = $schema[$type];
+					foreach ($files AS $file)
+					{
+						Media::add($file[0], $file[1], $type);
+					}
+				}
 			}
 		}
 	}
@@ -60,12 +87,12 @@ abstract class Kohana_Media {
 				$sort_me[$key] = $subarray[$subkey];
 			}
 		}
-		
+
 		// sort by priority, giving you the keys in desired order
 		asort($sort_me);
 
 		$return_me = array();
-		
+
 		// Add the full arrays to $return_me
 		foreach($sort_me AS $key => $priority)
 		{
