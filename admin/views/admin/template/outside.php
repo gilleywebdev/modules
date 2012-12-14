@@ -10,6 +10,6 @@
 				<?php echo $content ?>
 			</div>
 		</div>
-	<?php Scripts::output() ?>
+	<?php Scripts::output('admin_outside') ?>
 	</body>
 </html>

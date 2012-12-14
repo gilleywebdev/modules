@@ -14,6 +14,8 @@ class Kohana_Styles extends Media{
 	const PLUGIN = 20; // CSS for JS plugins
 
 	const TEMPLATE = 30; // Global stylsheet
+	
+	const CUTOFF = 30; // The cutoff for what goes in the combined production stylesheet
 
 	const PAGE = 40; // 1-page tweaks
 	
@@ -21,14 +23,15 @@ class Kohana_Styles extends Media{
 	{
 		parent::add($name, $priority, $type);
 	}
-	
-	public static function output ($prodfile = NULL, $defaults = NULL)
+
+	protected static function add_defaults($profile, $type = 'styles')
 	{
-		// Add defaults
-		if ($defaults !== NULL)
-		{
-			Styles::add_defaults($defaults, 'styles');
-		}
+		parent::add_defaults($profile, $type);
+	}
+
+	public static function output ($profile = 'default')
+	{
+		Styles::add_defaults($profile);
 
 		// Sort the sheets by priority
 		$sheets = Styles::prepare(Styles::$_buffer, 'priority', 'styles');
@@ -36,6 +39,7 @@ class Kohana_Styles extends Media{
 		// if production
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
+			/*
 			// Parse for slashes
 			$file = Media::parse($prodfile);
 
@@ -44,12 +48,14 @@ class Kohana_Styles extends Media{
 			{
 				echo HTML::style(Styles::MEDIA_FOLDER.$file['prefix'].Styles::CSS_PATH.$file['name'].Styles::POST_EXT);
 			}
+			*/
+			echo HTML::style('/styles/'.$profile);
 		}
 
 		foreach ($sheets AS $file)
 		{
 			// Dev: output everything, Prod: only if more specific than template (otherwise it's in the combined prod stylesheet)
-			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($sheet['priority'] > Styles::TEMPLATE))
+			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($sheet['priority'] > Styles::CUTOFF))
 			{
 				$path = Styles::MEDIA_FOLDER.$file['prefix'].Styles::CSS_PATH.$file['name'].Styles::POST_EXT;
 				echo HTML::style($path);

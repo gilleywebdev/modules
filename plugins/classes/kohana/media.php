@@ -30,24 +30,21 @@ abstract class Kohana_Media {
 	}
 	
 	// Make sure it's an array of arrays and then add those to the buffer
-	protected static function add_defaults ($defaults, $type)
+	protected static function add_defaults ($profile, $type)
 	{
-		if(is_array($defaults))
+		$config = Kohana::$config->load('styles');
+		
+		$defaults = $config->get($profile);
+
+		foreach($defaults AS $default)
 		{
-			foreach($defaults AS $default)
+			if (is_array($default))
 			{
-				if(is_array($default))
-				{
-					Media::add($default[0], $default[1], $type);
-				}
-				else{
-					throw new Kohana_Exception('Expected array');
-				}
+				Media::add($default[0], $default[1], $type);
 			}
-		}
-		else
-		{
-			throw new Kohana_Exception('Expected array');
+			else {
+				throw new Kohana_Exception('Expected array, given '.$default.' in add_defaults()');
+			}
 		}
 	}
 
@@ -80,8 +77,10 @@ abstract class Kohana_Media {
 	
 	protected static function parse ($name)
 	{
+		// $name will be either 'string' or 'prefix/string'
 		$file = array();
 
+		// Check for slash
 		if (strpos($name, '/') !== FALSE)
 		{
 			$pieces = explode('/', $name);
