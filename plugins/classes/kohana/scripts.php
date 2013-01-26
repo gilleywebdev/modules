@@ -22,20 +22,10 @@ class Kohana_Scripts extends Media {
 		parent::add($name, $priority, $type);
 	}
 
-	protected static function add_defaults($profile, $type = 'scripts')
-	{
-		parent::add_defaults($profile, $type);
-	}
-
-	protected static function add_plugins($profile, $type = 'scripts')
-	{
-		parent::add_plugins($profile, $type);
-	}
-
 	public static function output ($profile = 'default')
 	{
-		Scripts::add_defaults($profile);
-		Scripts::add_plugins($profile);
+		Scripts::add_defaults($profile, 'scripts');
+		Scripts::add_plugins($profile, 'scripts');
 		
 		// Sort the scripts by priority
 		$scripts = Scripts::prepare(Scripts::$_buffer, 'priority', 'scripts');
@@ -68,8 +58,8 @@ class Kohana_Scripts extends Media {
 
 	public static function prepare_production_file ($profile = 'default')
 	{
-		Scripts::add_defaults($profile);
-		Scripts::add_plugins($profile);
+		Scripts::add_defaults($profile, 'scripts');
+		Scripts::add_plugins($profile, 'scripts');
 		
 		// Sort the sheets by priority
 		$scripts = Scripts::prepare(Scripts::$_buffer, 'priority', 'scripts');

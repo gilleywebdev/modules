@@ -24,20 +24,10 @@ class Kohana_Styles extends Media{
 		parent::add($name, $priority, $type);
 	}
 
-	protected static function add_defaults($profile, $type = 'styles')
-	{
-		parent::add_defaults($profile, $type);
-	}
-
-	protected static function add_plugins($profile, $type = 'styles')
-	{
-		parent::add_plugins($profile, $type);
-	}
-
 	public static function output ($profile = 'default')
 	{
-		Styles::add_defaults($profile);
-		Styles::add_plugins($profile);
+		Styles::add_defaults($profile, 'styles');
+		Styles::add_plugins($profile, 'styles');
 
 		// Sort the sheets by priority
 		$sheets = Styles::prepare(Styles::$_buffer, 'priority', 'styles');
@@ -61,8 +51,8 @@ class Kohana_Styles extends Media{
 	
 	public static function prepare_production_file ($profile = 'default')
 	{
-		Styles::add_defaults($profile);
-		Styles::add_plugins($profile);
+		Styles::add_defaults($profile, 'styles');
+		Styles::add_plugins($profile, 'styles');
 		
 		// Sort the sheets by priority
 		$sheets = Styles::prepare(Styles::$_buffer, 'priority', 'styles');
