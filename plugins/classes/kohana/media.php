@@ -48,6 +48,7 @@ abstract class Kohana_Media {
 			{
 				if (is_array($default))
 				{
+					// Name, priority, type, profile
 					Media::add($default[0], $default[1], $type, $profile);
 				}
 				else {
@@ -74,6 +75,7 @@ abstract class Kohana_Media {
 					$files = $schema[$type];
 					foreach ($files AS $file)
 					{
+						// Name, priority, type, profile
 						Media::add($file[0], $file[1], $type, $profile);
 					}
 				}
