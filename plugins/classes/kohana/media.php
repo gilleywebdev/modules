@@ -6,10 +6,16 @@ abstract class Kohana_Media {
 	protected static $_buffer = array();
 
 	// Add the specified media to the buffer
-	public static function add ($name, $priority, $type)
+	public static function add ($name, $priority, $type, $profile = 'default')
 	{
+		// Create the profile buffer if it doesn't exist
+		if ( ! isset(Media::$_buffer[$profile]))
+		{
+			Media::$_buffer[$profile] = array();
+		}
+		
 		// No doubles
-		if (in_array($name, Media::$_buffer))
+		if (in_array($name, Media::$_buffer[$profile]))
 		{
 			return false;
 		}
@@ -18,7 +24,7 @@ abstract class Kohana_Media {
 			$file = Media::parse($name);
 			
 			// Add it to the buffer
-			Media::$_buffer[] = array(
+			Media::$_buffer[$profile][] = array(
 				'name' => $file['name'],
 				'priority' => $priority,
 				'prefix' => $file['prefix'],
@@ -42,7 +48,7 @@ abstract class Kohana_Media {
 			{
 				if (is_array($default))
 				{
-					Media::add($default[0], $default[1], $type);
+					Media::add($default[0], $default[1], $type, $profile);
 				}
 				else {
 					throw new Kohana_Exception('Expected array, given '.$default.' in add_defaults()');
@@ -68,7 +74,7 @@ abstract class Kohana_Media {
 					$files = $schema[$type];
 					foreach ($files AS $file)
 					{
-						Media::add($file[0], $file[1], $type);
+						Media::add($file[0], $file[1], $type, $profile);
 					}
 				}
 			}

@@ -19,9 +19,9 @@ class Kohana_Styles extends Media{
 
 	const PAGE = 40; // 1-page tweaks
 	
-	public static function add ($name, $priority, $type = 'styles')
+	public static function add ($name, $priority, $type = 'styles', $profile = 'default')
 	{
-		parent::add($name, $priority, $type);
+		parent::add($name, $priority, $type, $profile);
 	}
 
 	public static function output ($profile = 'default')
@@ -30,7 +30,7 @@ class Kohana_Styles extends Media{
 		Styles::add_plugins($profile, 'styles');
 
 		// Sort the sheets by priority
-		$sheets = Styles::prepare(Styles::$_buffer, 'priority', 'styles');
+		$sheets = Styles::prepare(Styles::$_buffer[$profile], 'priority', 'styles');
 
 		// if production
 		if (Kohana::$environment === Kohana::PRODUCTION)
@@ -55,7 +55,7 @@ class Kohana_Styles extends Media{
 		Styles::add_plugins($profile, 'styles');
 		
 		// Sort the sheets by priority
-		$sheets = Styles::prepare(Styles::$_buffer, 'priority', 'styles');
+		$sheets = Styles::prepare(Styles::$_buffer[$profile], 'priority', 'styles');
 		
 		$return = array();
 		foreach ($sheets AS $file)
@@ -72,7 +72,7 @@ class Kohana_Styles extends Media{
 				$return[] = $return_file;
 			}
 		}
-		
+
 		return $return;
 	}
 }

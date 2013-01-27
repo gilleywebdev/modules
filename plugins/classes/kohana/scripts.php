@@ -17,9 +17,9 @@ class Kohana_Scripts extends Media {
 
 	const CONTROLLER = 30; // Controllers
 
-	public static function add($name, $priority, $type = 'scripts')
+	public static function add($name, $priority, $type = 'scripts', $profile = 'default')
 	{
-		parent::add($name, $priority, $type);
+		parent::add($name, $priority, $type, $profile);
 	}
 
 	public static function output ($profile = 'default')
@@ -28,7 +28,7 @@ class Kohana_Scripts extends Media {
 		Scripts::add_plugins($profile, 'scripts');
 		
 		// Sort the scripts by priority
-		$scripts = Scripts::prepare(Scripts::$_buffer, 'priority', 'scripts');
+		$scripts = Scripts::prepare(Scripts::$_buffer[$profile], 'priority', 'scripts');
 
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
@@ -62,7 +62,7 @@ class Kohana_Scripts extends Media {
 		Scripts::add_plugins($profile, 'scripts');
 		
 		// Sort the sheets by priority
-		$scripts = Scripts::prepare(Scripts::$_buffer, 'priority', 'scripts');
+		$scripts = Scripts::prepare(Scripts::$_buffer[$profile], 'priority', 'scripts');
 		
 		$return = array();
 		foreach ($scripts AS $file)
