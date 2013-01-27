@@ -49,7 +49,7 @@ class Controller_Admin_User extends Controller_Admin {
 				$user->add('roles', ORM::factory('role', array('name' => 'login')));
 
 				// Success
-				$this->request->redirect('/admin/user/index/success/added');
+				$this->redirect('/admin/user/index/success/added');
 			}
 			catch( ORM_Validation_Exception $e)
 			{
@@ -71,13 +71,13 @@ class Controller_Admin_User extends Controller_Admin {
 		// Can't delete self
 		if($this->user->id === $user->id)
 		{
-			$this->request->redirect('/admin/user/index/error/deleteself');
+			$this->redirect('/admin/user/index/error/deleteself');
 		}
 
 		// Can't delete me
 		if($user->username === 'chris')
 		{
-			$this->request->redirect('/admin/user/index/error/deletechris');
+			$this->redirect('/admin/user/index/error/deletechris');
 		}
 
 		// Otherwise delete ok
@@ -89,10 +89,10 @@ class Controller_Admin_User extends Controller_Admin {
 				$obj = ORM::factory('user')->where('id', '=', $id)->find();
 				$obj->delete();
 
-				$this->request->redirect('/admin/user/index/success/deleted');
+				$this->redirect('/admin/user/index/success/deleted');
 			}
 			else{
-				$this->request->redirect('/admin/user/');
+				$this->redirect('/admin/user/');
 			}
 		}
 

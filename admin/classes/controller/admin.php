@@ -12,7 +12,7 @@ class Controller_Admin extends Controller_Template {
 		if ( ! is_object($this->user))
 		{
 			// Send to login screen if not
-			$this->request->redirect('admin/auth/login');
+			$this->redirect('admin/auth/login');
 		}
 		else
 		{

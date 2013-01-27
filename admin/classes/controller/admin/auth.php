@@ -9,7 +9,7 @@ class Controller_Admin_Auth extends Controller_Template {
 		$this->user = Auth::instance()->get_user();
 		if (is_object($this->user))
 		{
-			$this->request->redirect('admin');
+			$this->redirect('admin');
 		}
 
 		// Post
@@ -21,7 +21,7 @@ class Controller_Admin_Auth extends Controller_Template {
 			if ($success)
 			{
 				// Success
-				$this->request->redirect('admin');
+				$this->redirect('admin');
 			}
 			else
 			{
@@ -40,7 +40,7 @@ class Controller_Admin_Auth extends Controller_Template {
 	public function action_logout()
 	{
 		Auth::instance()->logout();
-		$this->request->redirect('admin/auth/login');
+		$this->redirect('admin/auth/login');
 	}
 	
 	public function action_forgotpassword()
@@ -128,7 +128,7 @@ class Controller_Admin_Auth extends Controller_Template {
 
 					// Success
 					Auth::instance()->force_login($user);
-					$this->request->redirect('admin/dashboard/index/success/password_reset');
+					$this->redirect('admin/dashboard/index/success/password_reset');
 				}
 				else{
 					// Failure
@@ -144,7 +144,7 @@ class Controller_Admin_Auth extends Controller_Template {
 		else
 		{
 			// User didn't load, token is out of date
-			$this->request->redirect('admin/auth/forgotpassword/error/reset_expired');
+			$this->redirect('admin/auth/forgotpassword/error/reset_expired');
 		}
 	}
 }
