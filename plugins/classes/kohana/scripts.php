@@ -28,7 +28,13 @@ class Kohana_Scripts extends Media {
 		Scripts::add_plugins($profile, 'scripts');
 		
 		// Sort the scripts by priority
-		$scripts = Scripts::prepare(Scripts::$_buffer[$profile], 'priority', 'scripts');
+		if (isset(Scripts::$_buffer[$profile]))
+		{
+			$scripts = Scripts::prepare(Scripts::$_buffer[$profile], 'priority', 'scripts');
+		}
+		else {
+			$scripts = array();
+		}
 
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
@@ -62,8 +68,15 @@ class Kohana_Scripts extends Media {
 		Scripts::add_plugins($profile, 'scripts');
 		
 		// Sort the sheets by priority
-		$scripts = Scripts::prepare(Scripts::$_buffer[$profile], 'priority', 'scripts');
-		
+		if (isset(Scripts::$_buffer[$profile]))
+		{
+			$scripts = Scripts::prepare(Scripts::$_buffer[$profile], 'priority', 'scripts');
+		}
+		else 
+		{
+			$scripts = array();
+		}
+
 		$return = array();
 		foreach ($scripts AS $file)
 		{

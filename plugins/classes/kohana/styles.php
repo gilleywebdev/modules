@@ -30,7 +30,13 @@ class Kohana_Styles extends Media{
 		Styles::add_plugins($profile, 'styles');
 
 		// Sort the sheets by priority
-		$sheets = Styles::prepare(Styles::$_buffer[$profile], 'priority', 'styles');
+		if (isset(Styles::$_buffer[$profile]))
+		{
+			$sheets = Styles::prepare(Styles::$_buffer[$profile], 'priority', 'styles');
+		}
+		else {
+			$sheets = array();
+		}
 
 		// if production
 		if (Kohana::$environment === Kohana::PRODUCTION)
@@ -55,7 +61,13 @@ class Kohana_Styles extends Media{
 		Styles::add_plugins($profile, 'styles');
 		
 		// Sort the sheets by priority
-		$sheets = Styles::prepare(Styles::$_buffer[$profile], 'priority', 'styles');
+		if (isset(Styles::$_buffer[$profile]))
+		{
+			$sheets = Styles::prepare(Styles::$_buffer[$profile], 'priority', 'styles');
+		}
+		else {
+			$sheets = array();
+		}
 		
 		$return = array();
 		foreach ($sheets AS $file)
