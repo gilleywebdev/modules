@@ -17,24 +17,22 @@ class Kohana_Scripts extends Media {
 
 	const CONTROLLER = 30; // Controllers
 
-	public static function add ($name, $priority, $type = 'scripts')
+	public static function add ($name, $priority = Scripts::CONTROLLER, $type = 'scripts')
 	{
 		parent::add($name, $priority, $type);
 	}
 
 	public static function output ($profile = 'default')
 	{
-		$assets = Media::get_assets($profile, 'scripts');
-		
-		$scripts = Scripts::prepare($assets, 'priority', 'scripts');
+		$scripts = Media::get_assets($profile, 'scripts');
 
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
 			// Production settings
 			$folder = Scripts::JS_PATH_PROD;
 			$min = '.min';
-
-			echo HTML::script('prod/scripts/'.$profile.Scripts::EXT);
+			
+			echo HTML::script('media/scripts/prod/'.$profile.Scripts::EXT);
 		}
 		else
 		{
@@ -42,7 +40,7 @@ class Kohana_Scripts extends Media {
 			$folder = Scripts::JS_PATH_DEV;
 			$min = '';
 		}
-
+		
 		foreach($scripts AS $file)
 		{
 			// Dev: output everything, Prod: only if more specific than plugin (otherwise it's in the combined prod script)
@@ -56,18 +54,7 @@ class Kohana_Scripts extends Media {
 
 	public static function prepare_production_file ($profile = 'default')
 	{
-		Scripts::add_defaults($profile, 'scripts');
-		Scripts::add_plugins($profile, 'scripts');
-		
-		// Sort the sheets by priority
-		if (isset(Scripts::$_buffer[$profile]))
-		{
-			$scripts = Scripts::prepare(Scripts::$_buffer[$profile], 'priority', 'scripts');
-		}
-		else 
-		{
-			$scripts = array();
-		}
+		$scripts = Media::get_assets($profile, 'scripts');
 
 		$return = array();
 		foreach ($scripts AS $file)

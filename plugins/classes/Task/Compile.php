@@ -43,8 +43,6 @@ class Task_Compile extends Minion_Task
 		
 		foreach ($scripts_config as $profile => $files)
 		{
-			echo $profile;
-			
 			$scripts_profiles[$profile] = array(
 				'script_files' => array(),
 				'combined' => '',

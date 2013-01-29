@@ -7,19 +7,3 @@ Route::set('media', 'media(/<file>)', array('file' => '.+'))
 		'action'    	=> 'media',
 		'file'      	=> NULL,
 	));
-	
-// Concatenated production styles
-Route::set('prodstyles', 'prod/styles/<profile>.css', array('profile' => '.+'))
-	->defaults(array(
-		'controller'	=> 'assets',
-		'action'		=> 'prodstyles',
-		'profile'		=> NULL,
-	));
-
-// Concatenated production styles
-Route::set('prodscripts', 'prod/scripts/<profile>.js', array('profile' => '.+'))
-	->defaults(array(
-		'controller'	=> 'assets',
-		'action'		=> 'prodscripts',
-		'profile'		=> NULL,
-	));

@@ -11,122 +11,55 @@ abstract class Kohana_Media {
 	// Add the specified media to the buffer
 	public static function add ($name, $priority, $type)
 	{
-		Media::$_buffer[$type] = Media::add_to_array(Media::$_buffer[$type], $name, $priority, $type);
-	}
-	
-	protected static function add_to_array ($array, $name, $priority, $type)
-	{
-		// No doubles
-		if ( ! in_array($name, $array))
-		{
-			// Break prefixes out of the first parameter
-			$file = Media::parse($name);
-
-			// Add it to the buffer
-			$array[] = array(
-				'name' => $file['name'],
-				'priority' => $priority,
-				'prefix' => $file['prefix'],
-				'type' => $type
-			);
-		}
-		return $array;
+		Media::$_buffer[$type][] = array($name, $priority);
 	}
 
 	public static function get_assets ($profile, $type)
 	{
-		$assets = array();
+		// Add from config
+		$config = Kohana::$config->load($type);
+		
+		$from_config = $config->get($profile) ? $config->get($profile) : array();
+		
+		// Add from plugins
+		$plugins_config = Kohana::$config->load('plugins');
+		$schemas_config = Kohana::$config->load('pluginschemas');
+	
+		$plugins = $plugins_config->get($profile) ? $plugins_config->get($profile) : array();
+		
+		$from_plugins = array();
+		foreach ($plugins as $plugin)
+		{
+			$from_plugins = $schemas_config[$plugin][$type];
+		}
+		
+		// Add from buffer
+		$from_buffer = Media::$_buffer[$type];
+		// Clear the buffer
+		Media::$_buffer[$type] = array();
 
-		$assets = Media::add_defaults($assets, $profile, $type);
-		$assets = Media::add_plugins($assets, $profile, $type);
-		$assets = Media::add_from_buffer($assets, $profile, $type);
+		$assets = array_merge($from_config, $from_plugins, $from_buffer);
+		$assets = Media::prepare($assets);
 
 		return $assets;
 	}
 
-	protected static function add_from_buffer ($array, $profile, $type)
-	{
-		$buffer = Media::$_buffer[$type];
-		
-		// Clear the buffer
-		Media::$_buffer[$type] = array();
-		
-		if (is_array($buffer))
-		{
-			foreach ($buffer as $file)
-			{
-				if (is_array($file))
-				{
-					// Name, priority, type, profile
-					$array = Media::add_to_array($array, $file['name'], $file['priority'], $type);
-				}
-				else {
-					throw new Kohana_Exception('Expected array, given '.$default.' in add_from_buffer()');
-				}
-			}
-		}
-		return $array;
-	}
-
-	// Add global styles & scripts from config files
-	protected static function add_defaults ($array, $profile, $type)
-	{
-		$config = Kohana::$config->load($type);
-		
-		$defaults = $config->get($profile);
-
-		if (is_array($defaults))
-		{
-			foreach($defaults as $default)
-			{
-				if (is_array($default))
-				{
-					// Name, priority, type, profile
-					$array = Media::add_to_array($array, $default[0], $default[1], $type);
-				}
-				else {
-					throw new Kohana_Exception('Expected array, given '.$default.' in add_defaults()');
-				}
-			}
-		}
-		return $array;
-	}
-	
-	protected static function add_plugins ($array, $profile, $type)
-	{
-		$plugins_config = Kohana::$config->load('plugins');
-		$schemas_config = Kohana::$config->load('pluginschemas');
-		
-		$plugins = $plugins_config->get($profile);
-
-		if (is_array($plugins))
-		{
-			foreach($plugins as $plugin)
-			{
-				$schema = $schemas_config->get($plugin);
-				if (is_array($schema[$type]))
-				{
-					$files = $schema[$type];
-					foreach ($files AS $file)
-					{
-						Media::add_to_array($array, $file[0], $file[1], $type, $profile);
-					}
-				}
-			}
-		}
-		return $array;
-	}
-
-	protected static function prepare (array $input, $subkey, $filter)
+	// Sort and filter out doubles
+	protected static function prepare (array $input)
 	{
 		$sort_me = array();
+		$doubles = array();
 		
 		// Filter and add stubs to $sort_me
-		foreach($input AS $key => $subarray)
+		foreach($input as $key => $subarray)
 		{
-			if ($subarray['type'] === $filter)
+			// Check for name doubles
+			if ( ! in_array($subarray[0], $doubles))
 			{
-				$sort_me[$key] = $subarray[$subkey];
+				// key => priority
+				$sort_me[$key] = $subarray[1];
+				// add the name to doubles array
+				$doubles[] = $subarray[0];
 			}
 		}
 
@@ -138,7 +71,16 @@ abstract class Kohana_Media {
 		// Add the full arrays to $return_me
 		foreach($sort_me AS $key => $priority)
 		{
-			$return_me[] = $input[$key];
+			// Move things around to make it a little nicer to work with
+			$file = Media::parse($input[$key][0]);
+			
+			$add_me = array(
+				'prefix' => $file['prefix'],
+				'name' => $file['name'],
+				'priority' => $input[$key][1],
+			);
+			
+			$return_me[] = $add_me;
 		}
 		
 		return $return_me;

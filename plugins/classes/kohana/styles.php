@@ -17,21 +17,19 @@ class Kohana_Styles extends Media{
 
 	const PAGE = 40; // 1-page tweaks
 	
-	public static function add ($name, $priority, $type = 'styles')
+	public static function add ($name, $priority = Styles::PAGE, $type = 'styles')
 	{
 		parent::add($name, $priority, $type);
 	}
 
 	public static function output ($profile = 'default')
 	{
-		$assets = Media::get_assets($profile, 'styles');
-
-		$sheets = Styles::prepare($assets, 'priority', 'styles');
+		$sheets = Media::get_assets($profile, 'styles');
 
 		// if production
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			echo HTML::style('prod/styles/'.$profile.Styles::EXT);
+			echo HTML::style('media/styles/prod/'.$profile.Styles::EXT);
 		}
 
 		foreach ($sheets AS $file)
@@ -47,17 +45,7 @@ class Kohana_Styles extends Media{
 	
 	public static function prepare_production_file ($profile = 'default')
 	{
-		Styles::add_defaults($profile, 'styles');
-		Styles::add_plugins($profile, 'styles');
-		
-		// Sort the sheets by priority
-		if (isset(Styles::$_buffer[$profile]))
-		{
-			$sheets = Styles::prepare(Styles::$_buffer[$profile], 'priority', 'styles');
-		}
-		else {
-			$sheets = array();
-		}
+		$sheets = Media::get_assets($profile, 'styles');
 		
 		$return = array();
 		foreach ($sheets AS $file)
