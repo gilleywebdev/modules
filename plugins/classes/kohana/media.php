@@ -1,42 +1,75 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 abstract class Kohana_Media {
-	const MEDIA_FOLDER = 'media/';
+	const MEDIA_FOLDER = 'media';
 
-	protected static $_buffer = array();
+	protected static $_buffer = array(
+		'scripts' => array(),
+		'styles' => array(),
+	);
 
 	// Add the specified media to the buffer
-	public static function add ($name, $priority, $type, $profile = 'default')
+	public static function add ($name, $priority, $type)
 	{
-		// Create the profile buffer if it doesn't exist
-		if ( ! isset(Media::$_buffer[$profile]))
-		{
-			Media::$_buffer[$profile] = array();
-		}
-		
+		Media::$_buffer[$type] = Media::add_to_array(Media::$_buffer[$type], $name, $priority, $type);
+	}
+	
+	protected static function add_to_array ($array, $name, $priority, $type)
+	{
 		// No doubles
-		if (in_array($name, Media::$_buffer[$profile]))
+		if ( ! in_array($name, $array))
 		{
-			return false;
-		}
-		else{
 			// Break prefixes out of the first parameter
 			$file = Media::parse($name);
-			
+
 			// Add it to the buffer
-			Media::$_buffer[$profile][] = array(
+			$array[] = array(
 				'name' => $file['name'],
 				'priority' => $priority,
 				'prefix' => $file['prefix'],
 				'type' => $type
 			);
-
-			return true;
 		}
+		return $array;
 	}
-	
+
+	public static function get_assets ($profile, $type)
+	{
+		$assets = array();
+
+		$assets = Media::add_defaults($assets, $profile, $type);
+		$assets = Media::add_plugins($assets, $profile, $type);
+		$assets = Media::add_from_buffer($assets, $profile, $type);
+
+		return $assets;
+	}
+
+	protected static function add_from_buffer ($array, $profile, $type)
+	{
+		$buffer = Media::$_buffer[$type];
+		
+		// Clear the buffer
+		Media::$_buffer[$type] = array();
+		
+		if (is_array($buffer))
+		{
+			foreach ($buffer as $file)
+			{
+				if (is_array($file))
+				{
+					// Name, priority, type, profile
+					$array = Media::add_to_array($array, $file['name'], $file['priority'], $type);
+				}
+				else {
+					throw new Kohana_Exception('Expected array, given '.$default.' in add_from_buffer()');
+				}
+			}
+		}
+		return $array;
+	}
+
 	// Add global styles & scripts from config files
-	protected static function add_defaults ($profile, $type)
+	protected static function add_defaults ($array, $profile, $type)
 	{
 		$config = Kohana::$config->load($type);
 		
@@ -44,21 +77,22 @@ abstract class Kohana_Media {
 
 		if (is_array($defaults))
 		{
-			foreach($defaults AS $default)
+			foreach($defaults as $default)
 			{
 				if (is_array($default))
 				{
 					// Name, priority, type, profile
-					Media::add($default[0], $default[1], $type, $profile);
+					$array = Media::add_to_array($array, $default[0], $default[1], $type);
 				}
 				else {
 					throw new Kohana_Exception('Expected array, given '.$default.' in add_defaults()');
 				}
 			}
 		}
+		return $array;
 	}
 	
-	protected static function add_plugins ($profile, $type)
+	protected static function add_plugins ($array, $profile, $type)
 	{
 		$plugins_config = Kohana::$config->load('plugins');
 		$schemas_config = Kohana::$config->load('pluginschemas');
@@ -67,7 +101,7 @@ abstract class Kohana_Media {
 
 		if (is_array($plugins))
 		{
-			foreach($plugins AS $plugin)
+			foreach($plugins as $plugin)
 			{
 				$schema = $schemas_config->get($plugin);
 				if (is_array($schema[$type]))
@@ -75,12 +109,12 @@ abstract class Kohana_Media {
 					$files = $schema[$type];
 					foreach ($files AS $file)
 					{
-						// Name, priority, type, profile
-						Media::add($file[0], $file[1], $type, $profile);
+						Media::add_to_array($array, $file[0], $file[1], $type, $profile);
 					}
 				}
 			}
 		}
+		return $array;
 	}
 
 	protected static function prepare (array $input, $subkey, $filter)

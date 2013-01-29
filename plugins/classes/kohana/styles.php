@@ -1,9 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Kohana_Styles extends Media{
-	const PRE_EXT = '.scss';
-
-	const POST_EXT = '.css';
+	const EXT = '.css';
 
 	const CSS_PATH = 'styles/css/';
 
@@ -19,29 +17,21 @@ class Kohana_Styles extends Media{
 
 	const PAGE = 40; // 1-page tweaks
 	
-	public static function add ($name, $priority, $type = 'styles', $profile = 'default')
+	public static function add ($name, $priority, $type = 'styles')
 	{
-		parent::add($name, $priority, $type, $profile);
+		parent::add($name, $priority, $type);
 	}
 
 	public static function output ($profile = 'default')
 	{
-		Styles::add_defaults($profile, 'styles');
-		Styles::add_plugins($profile, 'styles');
+		$assets = Media::get_assets($profile, 'styles');
 
-		// Sort the sheets by priority
-		if (isset(Styles::$_buffer[$profile]))
-		{
-			$sheets = Styles::prepare(Styles::$_buffer[$profile], 'priority', 'styles');
-		}
-		else {
-			$sheets = array();
-		}
+		$sheets = Styles::prepare($assets, 'priority', 'styles');
 
 		// if production
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			echo HTML::style('prod/styles/'.$profile.Styles::POST_EXT);
+			echo HTML::style('prod/styles/'.$profile.Styles::EXT);
 		}
 
 		foreach ($sheets AS $file)
@@ -49,7 +39,7 @@ class Kohana_Styles extends Media{
 			// Dev: output everything, Prod: only if more specific than template (otherwise it's in the combined prod stylesheet)
 			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($file['priority'] > Styles::CUTOFF))
 			{
-				$path = Styles::MEDIA_FOLDER.$file['prefix'].Styles::CSS_PATH.$file['name'].Styles::POST_EXT;
+				$path = Styles::MEDIA_FOLDER.'/'.$file['prefix'].Styles::CSS_PATH.$file['name'].Styles::EXT;
 				echo HTML::style($path);
 			}
 		}

@@ -31,8 +31,8 @@ class Controller_Admin_Auth extends Controller_Template {
 		}
 
 		// View
-		Styles::add('admin/login', Styles::PAGE, 'styles', 'admin');
-		Scripts::add('admin/login', Scripts::CONTROLLER, 'scripts', 'admin_outside');
+		Styles::add('admin/login', Styles::PAGE);
+		Scripts::add('admin/login', Scripts::CONTROLLER);
 		$this->template->content = View::factory('admin/auth/login');
 		$this->template->title = 'Login';
 	}
