@@ -4,64 +4,51 @@ class Task_Compile extends Minion_Task
 {
 	protected function _execute(array $params)
     {
-		// Styles
-		require Kohana::find_file('vendor', 'cssmin/CssMin');
-
-		$styles_config = Kohana::$config->load('styles');
-
-		$styles_profiles = array();
+		$media_types = array(
+			'styles',
+			'scripts',
+		);
 		
-		foreach ($styles_config as $profile => $files)
+		$content = array();
+		
+		foreach ($media_types as $type)
 		{
-			$styles_profiles[$profile] = array(
-				'stylesheets' => array(),
-				'combined' => '',
-			);
-
-			$files = Styles::prepare_production_file($profile);
-
-			$styles_profiles[$profile]['stylesheets'] = $files;
+			$config = Kohana::$config->load($type);
 			
-			foreach ($files as $file)
+			$profiles = array();
+			
+			foreach ($config as $profile => $files)
 			{
-				$styles_profiles[$profile]['combined'] .= file_get_contents(Kohana::find_file('media', $file['path'], $file['ext']));
+				$profiles[$profile] = array(
+					'files' => array(),
+					'combined' => '',
+				);
+				
+				$files = Media::get_assets($profile, $type);
+				
+				$profiles[$profile]['files'] = $files;
+				
+				foreach ($files as $file)
+				{
+					if ($file['priority'] <= $type::CUTOFF)
+					{
+						$path = Kohana::find_file(Media::MEDIA_FOLDER, $type::get_path($file), $type::EXT);
+						$profiles[$profile]['combined'] .= file_get_contents($path);			
+					}
+				}
+				$output = Minify::minify($profiles[$profile]['combined'], $type);
+				
+				$output_folder = APPPATH.'media/'.$type.'/prod';
+				
+				file_put_contents($output_folder.'/'.$profile.'.'.$type::EXT, $output);
 			}
 			
-			$output = CssMin::minify($styles_profiles[$profile]['combined']);
-
-			$output_folder = APPPATH.'media/styles/prod';
-
-			file_put_contents($output_folder.'/'.$profile.'.css', $output);
+			$content[$type] = $profiles;
 		}
-		
-		// Scripts
-		require Kohana::find_file('vendor', 'jsmin/jsmin');
-		
-		$scripts_config = Kohana::$config->load('scripts');
-		
-		$scripts_profiles = array();
-		
-		foreach ($scripts_config as $profile => $files)
-		{
-			$scripts_profiles[$profile] = array(
-				'script_files' => array(),
-				'combined' => '',
-			);
-			
-			$files = Scripts::prepare_production_file($profile);
-			
-			$scripts_profiles[$profile]['script_files'] = $files;
-			
-			foreach ($files as $file)
-			{
-				$scripts_profiles[$profile]['combined'] .= file_get_contents(Kohana::find_file('media', $file['path'], $file['ext']));
-			}
+		$view = new View('minion/compile');
 
-			$output = JsMin::minify($scripts_profiles[$profile]['combined']);
+		$view->content = $content;
 
-			$output_folder = APPPATH.'media/scripts/prod';
-
-			file_put_contents($output_folder.'/'.$profile.'.js', $output);
-		}
+		echo $view;
 	}
 }

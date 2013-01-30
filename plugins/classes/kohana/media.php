@@ -30,7 +30,14 @@ abstract class Kohana_Media {
 		$from_plugins = array();
 		foreach ($plugins as $plugin)
 		{
-			$from_plugins = $schemas_config[$plugin][$type];
+			$from_this_plugin = Kohana::$config->load('pluginschemas.'.$plugin.'.'.$type);
+			if (is_array($from_this_plugin))
+			{
+				foreach ($from_this_plugin as $file)
+				{
+					$from_plugins[] = $file;
+				}
+			}
 		}
 		
 		// Add from buffer

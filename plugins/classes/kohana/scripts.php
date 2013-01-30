@@ -1,11 +1,9 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Kohana_Scripts extends Media {
-	const EXT = '.js';
+	const EXT = 'js';
 
-	const JS_PATH_DEV = 'scripts/max/';
-
-	const JS_PATH_PROD = 'scripts/min/';
+	const JS_PATH = 'scripts/max/';
 
 	const FRAMEWORK = 0; // jQuery, Prototype etc.
 
@@ -25,20 +23,11 @@ class Kohana_Scripts extends Media {
 	public static function output ($profile = 'default')
 	{
 		$scripts = Media::get_assets($profile, 'scripts');
-
+		
+		// if production
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			// Production settings
-			$folder = Scripts::JS_PATH_PROD;
-			$min = '.min';
-			
-			echo HTML::script('media/scripts/prod/'.$profile.Scripts::EXT);
-		}
-		else
-		{
-			// Development settings
-			$folder = Scripts::JS_PATH_DEV;
-			$min = '';
+			echo HTML::script('media/scripts/prod/'.$profile.'.'.Scripts::EXT);
 		}
 		
 		foreach($scripts AS $file)
@@ -46,33 +35,15 @@ class Kohana_Scripts extends Media {
 			// Dev: output everything, Prod: only if more specific than plugin (otherwise it's in the combined prod script)
 			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($file['priority'] > Scripts::CUTOFF))
 			{
-				$path = Scripts::MEDIA_FOLDER.'/'.$file['prefix'].$folder.$file['name'].$min.Scripts::EXT;
+				$path = Media::MEDIA_FOLDER.'/'.Scripts::get_path($file).'.'.Scripts::EXT;
 				echo HTML::script($path);
 			}
 		}
 	}
-
-	public static function prepare_production_file ($profile = 'default')
+	
+	public static function get_path ($file)
 	{
-		$scripts = Media::get_assets($profile, 'scripts');
-
-		$return = array();
-		foreach ($scripts AS $file)
-		{
-			// Add in everything that is global
-			if ($file['priority'] <= Scripts::CUTOFF)
-			{
-				$path = $file['prefix'].Scripts::JS_PATH_PROD.$file['name'];
-				$return_file = array(
-					'path' => $path,
-					'ext' => 'min.js',
-				);
-				
-				$return[] = $return_file;
-			}
-		}
-		
-		return $return;
+		$path = $file['prefix'].Scripts::JS_PATH.$file['name'];
+		return $path;
 	}
-
 }

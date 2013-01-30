@@ -1,9 +1,12 @@
-<?php foreach ($styles as $profile => $files): ?>
-Compiling styles for profile <?php echo $profile ?>:
+<?php foreach ($content as $type => $val): ?>
+<?php echo $type ?>
 
-<?php foreach ($files as $file): ?>
-	<?php echo $file['path'].'.'.$file['ext'] ?>
+<?php foreach ($val as $profile => $profile_info): ?>
+	<?php echo $profile ?>
+
+<?php foreach ($profile_info['files'] as $file): ?>
+		<?php if ($file['prefix']) echo $file['prefix'] ?><?php echo $file['name'] ?>
 
 <?php endforeach ?>
-
+<?php endforeach ?>
 <?php endforeach ?>

@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Kohana_Styles extends Media{
-	const EXT = '.css';
+	const EXT = 'css';
 
 	const CSS_PATH = 'styles/css/';
 
@@ -29,7 +29,7 @@ class Kohana_Styles extends Media{
 		// if production
 		if (Kohana::$environment === Kohana::PRODUCTION)
 		{
-			echo HTML::style('media/styles/prod/'.$profile.Styles::EXT);
+			echo HTML::style('media/styles/prod/'.$profile.'.'.Styles::EXT);
 		}
 
 		foreach ($sheets AS $file)
@@ -37,32 +37,15 @@ class Kohana_Styles extends Media{
 			// Dev: output everything, Prod: only if more specific than template (otherwise it's in the combined prod stylesheet)
 			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($file['priority'] > Styles::CUTOFF))
 			{
-				$path = Styles::MEDIA_FOLDER.'/'.$file['prefix'].Styles::CSS_PATH.$file['name'].Styles::EXT;
+				$path = Media::MEDIA_FOLDER.'/'.Styles::get_path($file).'.'.Styles::EXT;
 				echo HTML::style($path);
 			}
 		}
 	}
-	
-	public static function prepare_production_file ($profile = 'default')
-	{
-		$sheets = Media::get_assets($profile, 'styles');
 		
-		$return = array();
-		foreach ($sheets AS $file)
-		{
-			// Add in everything that is global
-			if ($file['priority'] <= Styles::CUTOFF)
-			{
-				$path = $file['prefix'].Styles::CSS_PATH.$file['name'];
-				$return_file = array(
-					'path' => $path,
-					'ext' => 'css',
-				);
-				
-				$return[] = $return_file;
-			}
-		}
-
-		return $return;
+	public static function get_path ($file)
+	{
+		$path = $file['prefix'].Styles::CSS_PATH.$file['name'];
+		return $path;
 	}
 }
