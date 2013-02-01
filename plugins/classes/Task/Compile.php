@@ -40,7 +40,7 @@ class Task_Compile extends Minion_Task
 				// Minify
 				$output = Minify::minify($profiles[$profile]['combined'], $type);
 				
-				$output_folder = APPPATH.'../assets/'.$type;
+				$output_folder = APPPATH.'../assets';
 				
 				// Spit out the beautiful files
 				file_put_contents($output_folder.'/'.$profile.'.'.$type::EXT, $output);
