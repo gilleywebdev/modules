@@ -24,7 +24,7 @@ abstract class Kohana_Media {
 		// Add from plugins
 		$plugins_config = Kohana::$config->load('plugins');
 		$schemas_config = Kohana::$config->load('pluginschemas');
-	
+		
 		$plugins = $plugins_config->get($profile) ? $plugins_config->get($profile) : array();
 		
 		$from_plugins = array();

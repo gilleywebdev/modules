@@ -21,26 +21,41 @@ class Kohana_Styles extends Media{
 	{
 		parent::add($name, $priority, $type);
 	}
-
+	
 	public static function output ($profile = 'default')
 	{
 		$sheets = Media::get_assets($profile, 'styles');
-
-		// if production
-		if (Kohana::$environment === Kohana::PRODUCTION)
-		{
-			echo HTML::style('media/styles/prod/'.$profile.'.'.Styles::EXT);
-		}
-
+		
+		$prod_file_exists = false;
+		$uncompressed = '';
+		
 		foreach ($sheets AS $file)
 		{
+			if ($file['priority'] <= Styles::CUTOFF)
+			{
+				$prod_file_exists = true;
+			}
+			
 			// Dev: output everything, Prod: only if more specific than template (otherwise it's in the combined prod stylesheet)
-			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($file['priority'] > Styles::CUTOFF))
+			if ((Kohana::$environment !== Kohana::PRODUCTION) or ($file['priority'] > Styles::CUTOFF))
 			{
 				$path = Media::MEDIA_FOLDER.'/'.Styles::get_path($file).'.'.Styles::EXT;
-				echo HTML::style($path);
+				$uncompressed .= HTML::style($path);
 			}
 		}
+		
+		// if production
+		if ((Kohana::$environment === Kohana::PRODUCTION) and ($prod_file_exists === true))
+		{
+			$prod = APPPATH.'../assets/'.$profile.'.'.Styles::EXT;
+			if ($contents = file_get_contents($prod))
+			{
+				$hash = md5($contents);
+				echo HTML::style($profile.'-fp-'.$hash.'.'.Styles::EXT);
+			}
+		}
+		
+		echo $uncompressed;
 	}
 		
 	public static function get_path ($file)

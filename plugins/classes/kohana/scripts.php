@@ -24,21 +24,37 @@ class Kohana_Scripts extends Media {
 	{
 		$scripts = Media::get_assets($profile, 'scripts');
 		
-		// if production
-		if (Kohana::$environment === Kohana::PRODUCTION)
-		{
-			echo HTML::script('media/scripts/prod/'.$profile.'.'.Scripts::EXT);
-		}
+		$prod_file_exists = false;
+		$uncompressed = '';
 		
-		foreach($scripts AS $file)
+		foreach ($scripts AS $file)
 		{
+			if ($file['priority'] <= Scripts::CUTOFF)
+			{
+				$prod_file_exists = true;
+			}
+			
 			// Dev: output everything, Prod: only if more specific than plugin (otherwise it's in the combined prod script)
 			if ((Kohana::$environment !== Kohana::PRODUCTION) OR ($file['priority'] > Scripts::CUTOFF))
 			{
 				$path = Media::MEDIA_FOLDER.'/'.Scripts::get_path($file).'.'.Scripts::EXT;
-				echo HTML::script($path);
+				$uncompressed .= HTML::script($path);
 			}
 		}
+		
+		// if production
+		if ((Kohana::$environment === Kohana::PRODUCTION) and ($prod_file_exists === true))
+		{
+			$prod = APPPATH.'../assets/'.$profile.'.'.Scripts::EXT;
+					
+			if ($contents = file_get_contents($prod))
+			{
+				$hash = md5($contents);
+				echo HTML::script($profile.'-fp-'.$hash.'.'.Scripts::EXT);
+			}
+		}
+		
+		echo $uncompressed;
 	}
 	
 	public static function get_path ($file)

@@ -1,3 +1,4 @@
+Compiling production assets...
 <?php foreach ($content as $type => $val): ?>
 <?php echo $type ?>
 

@@ -36,10 +36,13 @@ class Task_Compile extends Minion_Task
 						$profiles[$profile]['combined'] .= file_get_contents($path);			
 					}
 				}
+				
+				// Minify
 				$output = Minify::minify($profiles[$profile]['combined'], $type);
 				
-				$output_folder = APPPATH.'media/'.$type.'/prod';
+				$output_folder = APPPATH.'../assets/'.$type;
 				
+				// Spit out the beautiful files
 				file_put_contents($output_folder.'/'.$profile.'.'.$type::EXT, $output);
 			}
 			
